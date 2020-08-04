@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [
+      "esnext",
+      "esnext.asynciterable",
+      "dom"
+    ],
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "~/*": [
+        "./src/atoms/*",
+        "./src/molecules/*",
+        "./src/organisms/*",
+        "./src/*"
+      ],
+      "@/*": [
+        "./src/atoms/*",
+        "./src/molecules/*",
+        "./src/organisms/*",
+        "./src/*"
+      ]
+    },
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "@nuxtjs/axios",
+      "@nuxtjs/device",
+      "@nuxtjs/toast",
+      "@nuxtjs/moment",
+      "cookie-universal-nuxt/types"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": ["node_modules"]
+}

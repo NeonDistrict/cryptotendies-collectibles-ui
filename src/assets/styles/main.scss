@@ -1,0 +1,93 @@
+@import '~normalize.css/normalize';
+
+@import '~bulma/sass/utilities/_all.sass';
+@import '~bulma/sass/components/dropdown.sass';
+
+@import './variables';
+@import './transition';
+
+body {
+  color: $color-regular-text;
+  font-family: 'Barlow', sans-serif;
+  margin: 0;
+  word-break: break-word;
+  background-color: $color-main-background;
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: $color-swan;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+[lazy] {
+  transition: opacity 0.3s ease;
+}
+
+[lazy='loading'] {
+  opacity: 0;
+}
+
+[lazy='loaded'] {
+  opacity: 1;
+}
+
+.el-dialog {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  &__wrapper {
+    padding: 1rem;
+
+    @media (min-width: $breakpoint) {
+      padding: 2rem;
+    }
+  }
+}
+
+.cdToast {
+  margin-top: 3rem !important;
+  @include breakpoint(sm) {
+    top: 0 !important;
+    margin-top: 4rem !important;
+  }
+
+  &__inner {
+    margin-left: auto;
+    display: flex;
+    justify-content: center !important;;
+    align-items: center !important;;
+    text-align: center !important;;
+    width: auto !important;
+    border-radius: 0.25rem !important;
+    background-color: rgba($color-shark, 0.9)!important;
+    border: 1px solid;
+    padding: 0.1rem 1rem !important;
+
+    span {
+      display: inline-block !important;;
+    }
+
+
+    &.success {
+      color: $color-meadow !important;
+      border-color: $color-meadow !important;
+    }
+
+    &.error {
+      color: $color-bittersweet !important;
+      border-color: $color-bittersweet !important;
+    }
+  }
+}

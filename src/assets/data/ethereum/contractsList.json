@@ -1,0 +1,17 @@
+{
+  "MCH_HERO": {
+    "1": "0x273f7f8e6489682df756151f5525576e322d51a3",
+    "3": "0x946048a75af11c300a274344887ec39452218b3d",
+    "4": "0x0a35c54f6c219f941e835fea442f15876348b2e6"
+  },
+  "MCH_EXTENSION": {
+    "1": "0xdceaf1652a131f32a821468dc03a92df0edd86ea",
+    "3": "0x79a43f841261caefbf779f2cf6b342f6d4741917",
+    "4": "0x40f4ff3cc8710b5f3539a82e3c97cfc154a4c7d5"
+  },
+  "MCH_LAND": {
+    "1": "0x617913dd43dbdf4236b85ec7bdf9adfd7e35b340",
+    "3": "0x7545520ea424128176639aa995ec4d2742dcfb91",
+    "4": "0xD1C47EEBfe6443C62af825cB78D4F82369aaB1b8"
+  }
+}

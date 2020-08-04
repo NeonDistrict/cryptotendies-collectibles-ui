@@ -1,0 +1,314 @@
+
+$breakpoint: 768px;
+// $screen-max-width: 1280px;
+$screen-max-width: 950px;
+
+$font-battle: 'Oswald', sans-serif;
+$font-mono: 'Source Code Pro', monospace;
+$font-standard: 'Barlow', sans-serif;
+
+$colors: (
+  mainWhite:    #fff,
+  mainGray:     #666,
+  mainYellow:   #f1c40f, // https://flatuicolors.com/palette/defo
+  mainRed:      #e74c3c, // https://flatuicolors.com/palette/defo
+  mainOrange:   #e67e22, // https://flatuicolors.com/palette/defo
+  mainGreen:    #2ecc71, // https://flatuicolors.com/palette/defo
+  mainDarkGreen:#16a085, // https://flatuicolors.com/palette/defo
+  mainBlue:     #3498db, // https://flatuicolors.com/palette/defo
+  mainPurple:   #9b59b6, // https://flatuicolors.com/palette/defo
+  mainGold:     #ffd700,
+  mainSilver:   #c0c0c0,
+  mainBronze:   #c47222,
+  usRed:        #d63031, // https://flatuicolors.com/palette/us
+  usOrange:     #e17055, // https://flatuicolors.com/palette/us
+  usYellow:     #fdcb6e, // https://flatuicolors.com/palette/us
+  usGreen:      #00b894, // https://flatuicolors.com/palette/us
+  usBlue:       #0984e3, // https://flatuicolors.com/palette/us
+  usLightBlue:  #74b9ff, // https://flatuicolors.com/palette/us
+  usPurple:     #a29bfe, // https://flatuicolors.com/palette/us
+  twitter:      #1da1f2, // http://brandcolors.net/
+  discord:      #7289da,  // http://brandcolors.net/
+
+  // palette 1
+  bittersweet:  #FF6E63,
+  mineShaft:    #303030,
+  emperor:      #4f4f4f,
+  tuna:         #37393e,
+  tuna-dark:    #2f333d,
+  shark-dark:   #1d1e21,
+  swan:         #fdfdfd,
+  riverbed:     #474E5C,
+  capecod:      #3f4343,
+  shuttle:      #566776,
+  osloGray:     #8a8d90,
+
+  // events
+  portage:      #8F7EF7,
+  sandyBrown:   #f49d5a,
+  orchid:       #d776d1,
+  sundown:      #ffaebe,
+  
+  // palette 2
+  obsidian:     #212121,
+  coal:         #343232,
+  iron:         #3A3838,
+  magikarp:     #FF7675,
+  woodsmoke:    #101113,  
+  gossip:       #C9F6B4,
+  mercury:      #E5E5E5,
+  malibu:       #6FC3FF,
+
+  // palette 3
+  shark:        #272C32,
+  mako:         #3C4148,
+  meadow:       #21CE99,
+  kournikova:   #FFEA75,
+  ectoplasm:    #F7AAF9,
+  mantis:       #7DC76C,
+  sunset:       #FF5252,
+  pictonblue:   #3b8fe5,
+  silver:       #A1A1A1,
+
+  // palette 4
+  maroonflush:  #C0265A,
+  brinkpink:    #F86596,
+  brightsun:    #FFDD3E,
+  koromiko:     #FFBC5C
+);
+
+$color-primary: #14a5c2;
+$color-primary-text: #303133;
+$color-regular-text: map-get($colors, swan);
+$color-secondary-text: #909399;
+$color-placeholder-text: #C0C4CC;
+$color-main-background: map-get($colors, shark);
+$color-base-border: #DCDFE6;
+$color-light-border: #E4E7ED;
+$color-lighter-border: #EBEEF5;
+$color-extra-light-border: #F2F6FC;
+$color-basic-black: #000;
+$color-basic-white: #fff;
+$color-attention: map-get($colors, mainRed);
+$color-mainDarkGreen: map-get($colors, mainDarkGreen);
+
+$color-swan: map-get($colors, swan);
+$color-gossip: map-get($colors, gossip);
+$color-woodsmoke: map-get($colors, woodsmoke);
+$color-bittersweet: map-get($colors, bittersweet);
+$color-mercury: map-get($colors, mercury);
+$color-capecod: map-get($colors, capecod);
+$color-sandyBrown: map-get($colors, sandyBrown);
+$color-kournikova: map-get($colors, kournikova);
+$color-malibu: map-get($colors, malibu);
+$color-error: map-get($colors, mainRed);
+$color-shark: darken(map-get($colors, shark), 3);
+$color-shark-dark: map-get($colors, shark-dark);
+$color-meadow: map-get($colors, meadow);
+$color-mako: darken(map-get($colors, mako), 3);
+$color-ectoplasm: map-get($colors, ectoplasm);
+$color-pictonblue: map-get($colors, pictonblue);
+$color-sunset: map-get($colors, sunset);
+$color-mantis: map-get($colors, mantis);
+$color-silver: map-get($colors, silver);
+$color-twitter: map-get($colors, twitter);
+$color-malibu: map-get($colors, malibu);
+$color-maroon: map-get($colors, maroonflush);
+$color-brinkpink: map-get($colors, brinkpink);
+$color-brightsun: map-get($colors, brightsun);
+$color-koromiko: map-get($colors, koromiko);
+
+// convenience
+%row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+%col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+%btn-primary {
+  @extend %row;
+  border: none;
+  color: $color-shark;
+  font-weight: 450;
+  background-color: $color-koromiko;
+  border-radius: 0.25rem;
+  padding: 0.6rem 1.25rem;
+  transition: 0.1s ease-in-out;
+  outline: none;
+
+  span + svg {
+    margin-left: 0.25rem;
+  }
+
+  svg {
+    font-size: 0.9rem;
+  }
+
+  span {
+    @extend %row;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($color-koromiko, 5);
+    color: $color-shark;
+  }
+
+  &:disabled {
+    background-color: darken($color-koromiko, 20);
+    color: darken($color-shark, 10);
+    cursor: default;
+  }
+}
+
+%btn-primary--small {
+  @extend %btn-primary;
+  font-weight: 400;
+  transform: skewX(0deg);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  span {
+    transform: skewX(0); 
+  }
+  img {
+    transform: skewX(0); 
+  }
+  svg {
+    transform: skewX(0);
+  }
+}
+
+%btn-primary--gray {
+  color: $color-swan;
+  background-color: lighten($color-mako, 10);
+
+  &:hover {
+    color: $color-swan;
+    background-color: lighten($color-mako, 5);
+  }
+
+  &:disabled {
+    color: $color-swan;
+    background-color: lighten($color-mako, 10);
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+%btn-secondary {
+  @extend %row;
+  border: none;
+  color: $color-koromiko;
+  font-weight: 450;
+  background-color: transparent;
+  border: 1px solid $color-koromiko;
+  border-radius: 0.25rem;
+  padding: 0.6rem 1.25rem;
+  outline: none;
+  transition: 0.1s ease-in-out;
+
+  span + svg {
+    margin-left: 0.25rem;
+  }
+
+  svg {
+    font-size: 0.9rem;
+  }
+
+  span {
+    @extend %row;
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: lighten($color-koromiko, 5);
+    border-color: lighten($color-koromiko, 5);
+  }
+
+  &:disabled {
+    border-color: darken($color-koromiko, 20);
+    color: darken($color-koromiko, 20);
+    cursor: default;
+  }
+}
+
+%btn-secondary--small {
+  @extend %btn-secondary;
+  font-weight: 400;
+  transform: skewX(0deg);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  span {
+    transform: skewX(0); 
+  }
+}
+
+%btn-secondary--gray {
+  color: lighten($color-mako, 50);
+  border-color: lighten($color-mako, 50);
+
+  &:hover {
+    color: lighten($color-mako, 30);
+    border-color: lighten($color-mako, 30);
+  }
+
+  &:disabled {
+    color: lighten($color-mako, 30);
+    border-color: lighten($color-mako, 30);
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+%btn-twitter {
+  @extend %btn-primary;
+  color: $color-swan;
+  background-color: $color-twitter;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+
+  &:hover {
+    color: $color-swan;
+    background-color: lighten($color-twitter, 5);
+  }
+
+  &:disabled {
+    color: $color-swan;
+    background-color: darken($color-twitter, 10);
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+// mixins
+@mixin breakpoint($class) {
+  @if $class == xs {
+    @media (max-width: 767px) { @content; }
+  }
+ 
+  @else if $class == sm {
+    @media (min-width: 768px) { @content; }
+  }
+ 
+  @else if $class == md {
+    @media (min-width: 992px) { @content; }
+  }
+ 
+  @else if $class == lg {
+    @media (min-width: 1200px) { @content; }
+  }
+ 
+  @else {
+    @warn "Breakpoint mixin supports: xs, sm, md, lg";
+  }
+}
