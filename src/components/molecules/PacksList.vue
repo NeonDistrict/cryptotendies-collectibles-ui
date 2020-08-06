@@ -2,12 +2,12 @@
 .packsList
   .packsList__wrapper
     nuxt-link.packsList__pack(
-      v-for="(pack, index) in allPacks" 
+      v-for="(box, index) in allBoxes" 
       :key="index"
       :to="'open'"
     )
-      pack(
-        :size="pack.size"
+      box(
+        :boxInfo="box"
       )
       .packsList__buttons
         button Trade
@@ -16,18 +16,18 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'nuxt-property-decorator'
-  import { ALL_PACKS } from '~/assets/data/db/mocked'
-  import Pack from '~/components/atoms/Pack.vue'
+  import { ALL_BOXES } from '~/assets/data/db/mocked'
+  import Box from '~/components/atoms/Box.vue'
 @Component({
   components: {
-    Pack
+    Box
   }
 })
   export default class PacksList extends Vue {
     @Prop() propName!: string
 
-    get allPacks() {
-      return ALL_PACKS
+    get allBoxes() {
+      return ALL_BOXES
     }
   }
 </script>

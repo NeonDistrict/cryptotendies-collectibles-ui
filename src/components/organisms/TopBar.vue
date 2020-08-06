@@ -7,6 +7,16 @@
   nuxt-link.topbar__link(:to="'/'")
     img.topbar__logo(src="~assets/images/tend.png")
     .topbar__title Tendies Collectibles
+  .topbar__wallet
+    button(
+      v-if="!hasWallet"
+      @click="sendToMetamask"
+    ) No Wallet
+    button(
+      v-else-if="isWalletLocked"
+      @click="unlockWallet"
+    ) Unlock Wallet
+    span(v-else) {{ shortenedAddress }}
 </template>
 
 <script lang="ts">
@@ -21,10 +31,12 @@
     @State networkId
     @State finishedInit
 
-    private account = ''
+    get hasWallet () {
+      return this.$ethereumService.hasWallet
+    }
 
     get isWalletLocked() {
-      return !this.account.length
+      return !this.ownAddress.length
     }
 
     get isMainnet () {
@@ -38,20 +50,32 @@
     get isUnsupportedNet () {
       return !(this.isMainnet || this.isRinkeby)
     }
+
+    get shortenedAddress() {
+      return `${this.ownAddress.substring(0, 5)}...${this.ownAddress.substring(this.ownAddress.length - 5, this.ownAddress.length)}`
+    }
+
+    async unlockWallet() {
+      return await this.$ethereumService.unlockWallet()
+    }
+
+    sendToMetamask() {
+      window.open('https://metamask.io/', '_blank')
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 .topbar {
   display: grid;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: auto 1fr;
   align-items: center;
   padding: 0.5rem 1rem;
   background-color: darken($color-shark, 1);
   /* border-bottom: 1px solid $color-meadow; */
   z-index: 999;
   @include breakpoint(sm) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     padding: 0.5rem 4rem;
     box-shadow: 0 2px 4px rgba($color-woodsmoke, 0.6);
   }
@@ -112,6 +136,19 @@
     font-size: 0.9rem;
     @include breakpoint(sm) {
       font-size: 1rem;
+    }
+  }
+
+  &__wallet {
+    margin-left: auto;
+    button {
+      @extend %btn-primary--small;
+      @extend %btn-primary--gray;
+    }
+
+    span {
+      color: rgba($color-swan, 0.9);
+      font-size: 0.9rem;
     }
   }
 }

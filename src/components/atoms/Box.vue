@@ -1,27 +1,30 @@
 <template lang="pug">
-.pack(:class="{'pack--large': isLarge}")
-  .pack__wrapper
-    img.pack__img(
+.box(:class="{'box--large': isLarge}")
+  .box__wrapper
+    img.box__img(
       :src="require('~/assets/images/bucket.png')"
-      :class="{'pack__img--large': isLarge}"
+      :class="{'box__img--large': isLarge}"
     )
-    .pack__size(:class="{'pack__size--large': isLarge}")
-      span {{ size }}
+    .box__size(:class="{'box__size--large': isLarge}")
+      span {{ boxInfo.size }}
       small Box
+  .box__owned {{boxInfo.copies}}x
 </template>
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { BoxInfo } from '~/types'
 @Component({})
-  export default class Pack extends Vue {
-    @Prop() size!: number
+  export default class Box extends Vue {
+    @Prop() boxInfo!: BoxInfo
     @Prop({default: false}) isLarge?: boolean
   }
 </script>
 
 <style lang="scss" scoped>
-.pack {
+.box {
   @extend %col;
+  position: relative;
   padding: 0.5rem 1.5rem;
   background-color: $color-woodsmoke;
   border-radius: 0.3rem;
@@ -89,6 +92,20 @@
         font-size: 0.9rem;
       }
     }
+  }
+
+  &__owned {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 99;
+    margin: 0 -0.5rem -0.5rem 0;
+    background-color: $color-shark;
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(white, 0.8);
   }
 
 }

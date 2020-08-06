@@ -24,3 +24,14 @@ export interface DropInfo {
     legendary: number
   }
 }
+
+export interface CardInfo {
+  image: number,
+  rarity: number,
+  copies: number
+}
+
+export interface BoxInfo {
+  size: number,
+  copies: number
+}

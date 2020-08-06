@@ -4,7 +4,8 @@
     card(
       v-for="(card, index) in allCards" 
       :key="index"
-      :imageId="index + 1"
+      :cardInfo="card"
+      :showOwned="true"
     )
 </template>
 

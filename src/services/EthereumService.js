@@ -48,7 +48,7 @@ export default class EthereumService {
     if (window.ethereum && window.ethereum.on) {
       try {
         window.ethereum.on('accountsChanged', (accounts) => {
-          this.store.dispatch('logout')
+          // handle account change
         })
       } catch (e) {
         console.error(`error setting listener: ${e}`)

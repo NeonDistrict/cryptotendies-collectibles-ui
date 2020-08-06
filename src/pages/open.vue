@@ -1,48 +1,54 @@
 <template lang="pug">
 .open
   .open__wrapper
-    pack(
+    box(
       :isLarge="true"
-      :size="4"
+      :boxInfo="boxInfo"
     )
     .open__content
-      .open__content__headline 4-Piece Tendie Box
+      .open__content__headline 6-Piece Tendie Box
       drop-rates(
+        :boxInfo="boxInfo"
         :dropInfo="dropInfo"
       )
       .open__content__text
   .open__main
-    button(v-if="isClosed")
-      span OPEN BOX
-    flipping-cards.open__main__cards(v-else)
+    .open__main__btns(v-if="isClosed")
+      button Sell Box
+      button(@click="openBox") Open Box
+    .open__main__open(v-else)
+      span Mommy knows you are a Good Boy
+      flipping-cards.open__main__cards
 </template>
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'nuxt-property-decorator'
-  import Pack from '~/components/atoms/Pack.vue'
+  import { ALL_BOXES } from '~/assets/data/db/mocked'
+  import Box from '~/components/atoms/Box.vue'
   import DropRates from '~/components/molecules/DropRates.vue'
   import FlippingCards from '~/components/molecules/FlippingCards.vue'
 @Component({
   components: {
-    Pack,
+    Box,
     DropRates,
     FlippingCards
   }
 })
   export default class Open extends Vue {
+    private isClosed = true
 
-    get isClosed() {
-      return false
+    get boxInfo() {
+      return ALL_BOXES[1]
     }
-    
+
     get dropInfo () {
       return {
-        cards: 4,
+        cards: 6,
         guaranteed: {
           common: 0,
-          uncommon: 1,
+          uncommon: 0,
           rare: 0,
-          epic: 0,
+          epic: 1,
           legendary: 0
         },
         rates: {
@@ -53,6 +59,10 @@
           legendary: 0.02
         }
       }
+    }
+
+    openBox() {
+      this.isClosed = false
     }
   }
 </script>
@@ -89,8 +99,33 @@
 
   &__main {
     margin-top: 2rem;
-    button { 
-      @extend %btn-primary;
+
+    &__btns {
+      margin: 2rem 0;
+      @extend %row;
+      button + button {
+        margin-left: 2rem;
+      }
+      button { 
+        width: 100%;
+        @extend %btn-primary;
+        @include breakpoint(sm) {
+          width: 12rem;
+        }
+        &:first-of-type {
+          @extend %btn-secondary;
+        }
+      }
+    }
+
+    &__open {
+      span { 
+        text-align: center;
+        display: block;
+        margin: 0 auto 2rem;
+        font-size: 1.1rem;
+        font-weight: 400;
+      }
     }
   }
 }

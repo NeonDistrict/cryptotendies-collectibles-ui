@@ -36,7 +36,7 @@ $colors: (
   emperor:      #4f4f4f,
   tuna:         #37393e,
   tuna-dark:    #2f333d,
-  shark-dark:   #1d1e21,
+  shark-dark:   #1D1E21,
   swan:         #fdfdfd,
   riverbed:     #474E5C,
   capecod:      #3f4343,
@@ -60,7 +60,7 @@ $colors: (
   malibu:       #6FC3FF,
 
   // palette 3
-  shark:        #272C32,
+  shark:        #282A2E,
   mako:         #3C4148,
   meadow:       #21CE99,
   kournikova:   #FFEA75,
@@ -172,18 +172,8 @@ $color-koromiko: map-get($colors, koromiko);
 %btn-primary--small {
   @extend %btn-primary;
   font-weight: 400;
-  transform: skewX(0deg);
   padding: 0.5rem 0.75rem;
   font-size: 0.9rem;
-  span {
-    transform: skewX(0); 
-  }
-  img {
-    transform: skewX(0); 
-  }
-  svg {
-    transform: skewX(0);
-  }
 }
 
 %btn-primary--gray {
