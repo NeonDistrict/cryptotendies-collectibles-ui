@@ -30,7 +30,7 @@
 .box {
   @extend %col;
   position: relative;
-  padding: 0.5rem 1.5rem;
+  padding: 1rem 2rem;
   background-color: $color-woodsmoke;
   border-radius: 0.3rem;
   box-shadow: 0 0 0 rgba($color-brinkpink, 0);
@@ -38,7 +38,7 @@
   border: 1px solid $color-koromiko;
 
   @include breakpoint(sm) {
-    padding: 1rem 2rem;
+    padding: 1.5rem 3rem;
   } 
 
   &:hover {
@@ -46,12 +46,12 @@
   }
 
   &--large {
-    padding: 1rem 2rem;
+    padding: 1.25rem 2rem;
     box-shadow: 0px 0px 8px $color-koromiko;
     cursor: default;
     
     @include breakpoint(sm) {
-      padding: 2rem 3rem;
+      padding: 2rem 4rem;
     } 
   }
 
@@ -66,12 +66,19 @@
   }
 
   &__img {
-    width: 2.25rem;
+    width: 3rem;
     height: auto;
     transition: 0.2s ease-in-out;
 
+    @include breakpoint(sm) {
+      width: 4rem;
+    } 
+
     &--large {
       width: 3rem;
+      @include breakpoint(sm) {
+        width: 4rem;
+      } 
     }
   }
 
@@ -81,19 +88,31 @@
       display: block;
       font-size: 1.6rem;
       font-weight: 500;
+      @include breakpoint(sm) {
+        font-size: 2rem;
+      } 
     }
     small { 
       font-size: 0.7rem;
       font-weight: 300;
+      @include breakpoint(sm) {
+        font-size: 0.9rem;
+      } 
     }
 
     &--large {
       span {
         font-size: 2rem;
+        @include breakpoint(sm) {
+          font-size: 2.4rem;
+        } 
       }
 
       small {
         font-size: 0.9rem;
+        @include breakpoint(sm) {
+          font-size: 1rem;
+        } 
       }
     }
   }

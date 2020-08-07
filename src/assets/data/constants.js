@@ -6,3 +6,6 @@ export const NEXT_AUTH_STEPS = [
 
 export const RARITIES = ['common', 'uncommon', 'rare', 'epic', 'legendary']
 
+export const BLOCKADE_API = (networkId) => {
+  return `https://${networkId === 1 ? 'eth' : 'rinkeby'}.api.blockade.games/api`
+}

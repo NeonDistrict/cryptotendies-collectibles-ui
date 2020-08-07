@@ -47,23 +47,23 @@ nuxt-link.card(
 <style lang="scss" scoped>
 .card {
   @extend %col;
-  height: 8rem;
-  width: 6rem;
+  height: 12rem;
+  width: 8rem;
   box-sizing: border-box;
 
   @include breakpoint(sm) {
-    height: 12rem;
-    width: 8rem;
+    height: 18rem;
+    width: 12rem;
   } 
 
   &--large {
     margin: 0 auto;
-    height: 12rem;
-    width: 8rem;
+    height: 18rem;
+    width: 12rem;
 
     @include breakpoint(sm) {
-      height: 16rem;
-      width: 12rem;
+      height: 24rem;
+      width: 16rem;
     } 
 
     .card__wrapper {

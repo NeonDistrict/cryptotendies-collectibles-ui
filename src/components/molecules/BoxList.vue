@@ -51,7 +51,9 @@
   &__wrapper {
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns:  repeat(auto-fill, minmax(10rem, 1fr));
+    justify-items: center;
+    align-items: center;
+    grid-template-columns:  repeat(auto-fill, minmax(12rem, 1fr));
 
     @include breakpoint(sm) {
       grid-gap: 2rem;

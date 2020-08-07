@@ -1,6 +1,10 @@
 import { Plugin } from '@nuxt/types'
+import OpenSeaService from '~/services/OpenSeaService'
+import BlockadeService from '~/services/BlockadeService'
 
 interface InterfaceTemplate {
+  $openSeaService: OpenSeaService,
+  $threeBoxService: BlockadeService
 }
 
 declare module 'vue/types/vue' {
@@ -19,6 +23,14 @@ declare module 'vuex/types/index' {
 }
 
 const services: Plugin = ({ app, $moment, store}, inject) => {
+  const openSeaService = new OpenSeaService(
+    app.$axios
+  )
+  const blockadeService = new BlockadeService(
+    app.$axios
+  )
+  inject('openSeaService', openSeaService)
+  inject('blockadeService', blockadeService)
 }
 
 export default services

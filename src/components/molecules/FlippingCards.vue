@@ -59,23 +59,25 @@
   &__wrapper {
     display: grid;
     grid-gap: 2rem 1rem;
-    grid-template-columns:  repeat(auto-fill, minmax(6rem, 1fr));
+    justify-items: center;
+    align-items: center;
+    grid-template-columns:  repeat(auto-fill, minmax(8rem, 1fr));
 
     @include breakpoint(sm) {
       grid-gap: 2rem;
-      grid-template-columns:  repeat(auto-fill, minmax(8rem, 1fr));
+      grid-template-columns:  repeat(auto-fill, minmax(12rem, 1fr));
     } 
   }
 
   &__scene {
-    height: 8rem;
-    width: 6rem;
+    height: 12rem;
+    width: 8rem;
     box-sizing: border-box;
     perspective: 600px;
 
     @include breakpoint(sm) {
-      height: 12rem;
-      width: 8rem;
+      height: 18rem;
+      width: 12rem;
     } 
   }
 
