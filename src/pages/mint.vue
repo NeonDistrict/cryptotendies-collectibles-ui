@@ -46,7 +46,7 @@
     private isMinting = false
 
     mintBoxes() {
-      this.$ethereumService.mintTendiesBox(this.receiver, this.amount, this.packId)
+      this.$ethereumService.mintTendiesBox(this.receiver, this.packId, this.amount)
     }
   }
 </script>

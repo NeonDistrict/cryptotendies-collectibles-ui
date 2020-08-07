@@ -5,7 +5,7 @@
       .open__boxes__box(
         v-for="boxInfo in allBoxes"
         :key="boxInfo.id"
-        :class="{isSelected: boxInfo.id === selectedId}"
+        :class="{isSelected: boxInfo.id === selectedId, selectable: ownTendiesBoxes[boxInfo.id]}"
         @click="() => selectBox(boxInfo.id)"
       )
         box(
@@ -13,7 +13,7 @@
           :boxInfo="boxInfo"
         )
     .open__content
-      .open__content__headline 6-Piece Tendie Box
+      .open__content__headline {{boxInfo.dropInfo.cards}}-Piece Tendie Box
       drop-rates(
         :boxInfo="boxInfo"
         :dropInfo="dropInfo"
@@ -34,6 +34,7 @@
       flipping-cards.open__main__cards(
         :cardIds="cardIds"
       )
+      button(@click="openNext") Open Next Box
   .open__main(v-else) 
     .open__main--empty 🐔 No owned Tendies Boxes found.
 </template>
@@ -85,6 +86,13 @@
 
     sendToOpenSea() {
       window.open('https://opensea.io/', '_blank')
+    }
+
+    openNext() {
+      this.isClosed = true
+      this.isOpening = false
+      this.isConfirming = false
+      this.cardIds = []
     }
 
     async openBox() {
@@ -207,8 +215,18 @@
         font-size: 1.1rem;
         font-weight: 400;
       }
+      button { 
+        @extend %btn-primary;
+        margin: 2rem auto;
+      }
     }
   }
+}
+
+
+.selectable {
+  cursor: pointer;  
+  opacity: 0.5;
 }
 
 .isSelected {

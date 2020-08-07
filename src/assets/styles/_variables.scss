@@ -163,8 +163,9 @@ $color-koromiko: map-get($colors, koromiko);
   }
 
   &:disabled {
-    background-color: darken($color-koromiko, 20);
-    color: darken($color-shark, 10);
+    opacity: 0.8;
+    background-color: darken($color-koromiko, 5);
+    color: darken($color-shark, 5);
     cursor: default;
   }
 }
@@ -224,8 +225,9 @@ $color-koromiko: map-get($colors, koromiko);
   }
 
   &:disabled {
-    border-color: darken($color-koromiko, 20);
-    color: darken($color-koromiko, 20);
+    opacity: 0.8;
+    border-color: darken($color-koromiko, 5);
+    color: darken($color-koromiko, 5);
     cursor: default;
   }
 }
