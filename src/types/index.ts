@@ -32,6 +32,6 @@ export interface CardInfo {
 }
 
 export interface BoxInfo {
-  size: number,
-  copies: number
+  id: number,
+  size: number
 }

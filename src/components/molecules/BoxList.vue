@@ -1,21 +1,21 @@
 <template lang="pug">
-.packsList
-  .packsList__wrapper
-    nuxt-link.packsList__pack(
+.boxList
+  .boxList__wrapper
+    .boxList__pack(
       v-for="(box, index) in allBoxes" 
       :key="index"
-      :to="'open'"
+      :class="{inactive: !ownedCopies(box)}"
     )
       box(
         :boxInfo="box"
       )
-      .packsList__buttons
-        button Trade
-        button Open
+      .boxList__buttons
+        button(@click="sendToOpenSea(box)" :disable="!ownedCopies(box)") Trade
+        button(@click="sendToOpen(box)" :disable="!ownedCopies(box)") Open
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State} from 'nuxt-property-decorator'
   import { ALL_BOXES } from '~/assets/data/db/mocked'
   import Box from '~/components/atoms/Box.vue'
 @Component({
@@ -23,17 +23,31 @@
     Box
   }
 })
-  export default class PacksList extends Vue {
-    @Prop() propName!: string
+  export default class BoxList extends Vue {
+    @State ownTendiesBoxes
 
     get allBoxes() {
       return ALL_BOXES
+    }
+
+    ownedCopies(boxInfo) {
+      return this.ownTendiesBoxes[boxInfo.id]
+    }
+
+    sendToOpen(boxInfo) {
+      if (!this.ownedCopies(boxInfo)) return
+      this.$router.push({ path: 'open', query: {id: boxInfo.id}})
+    }
+
+    sendToOpenSea(boxInfo) {
+      if (!this.ownedCopies(boxInfo)) return
+      window.open('https://opensea.io/', '_blank')
     }
   }
 </script>
 
 <style lang="scss" scoped>
-.packsList {
+.boxList {
   &__wrapper {
     display: grid;
     grid-gap: 1rem;
@@ -56,5 +70,9 @@
       }
     }
   }
+}
+
+.inactive {
+  opacity: 0.3;
 }
 </style>

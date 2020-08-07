@@ -1,10 +1,17 @@
 <template lang="pug">
 .open
   .open__wrapper
-    box(
-      :isLarge="true"
-      :boxInfo="boxInfo"
-    )
+    .open__boxes
+      .open__boxes__box(
+        v-for="boxInfo in allBoxes"
+        :key="boxInfo.id"
+        :class="{isSelected: boxInfo.id === selectedId}"
+        @click="() => selectBox(boxInfo.id)"
+      )
+        box(
+          :isLarge="true"
+          :boxInfo="boxInfo"
+        )
     .open__content
       .open__content__headline 6-Piece Tendie Box
       drop-rates(
@@ -12,57 +19,97 @@
         :dropInfo="dropInfo"
       )
       .open__content__text
-  .open__main
-    .open__main__btns(v-if="isClosed")
-      button Sell Box
-      button(@click="openBox") Open Box
+  .open__main(v-if="ownsTendiesBox || !isClosed")
+    .open__main__load(v-if="isConfirming")
+      loading-spinner
+      span Getting your serving ready. 
+      span This could take a while, please don't close this tab.
+    .open__main__btns(v-else-if="isClosed")
+      button(sendToOpenSea) Sell Box
+      button(@click="openBox" :disabled="isOpening") 
+        fa-icon(v-if="isOpening" :icon="['fal', 'spinner']" spin)
+        span Open Box
     .open__main__open(v-else)
       span Mommy knows you are a Good Boy
-      flipping-cards.open__main__cards
+      flipping-cards.open__main__cards(
+        :cardIds="cardIds"
+      )
+  .open__main(v-else) 
+    .open__main--empty 🐔 No owned Tendies Boxes found.
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State, Action } from 'nuxt-property-decorator'
   import { ALL_BOXES } from '~/assets/data/db/mocked'
+  import { TENDIES_CARD } from '~/assets/data/ethereum/contractsList.json'
   import Box from '~/components/atoms/Box.vue'
+  import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import DropRates from '~/components/molecules/DropRates.vue'
   import FlippingCards from '~/components/molecules/FlippingCards.vue'
 @Component({
   components: {
     Box,
     DropRates,
-    FlippingCards
+    FlippingCards,
+    LoadingSpinner
   }
 })
   export default class Open extends Vue {
     private isClosed = true
+    private isOpening = false
+    private isConfirming = false
+    private cardIds = []
+    @State ownTendiesBoxes
+    @State chainId
+    @Action getInventoryOfUser
+
+    get selectedId () {
+      return Number(this.$route.query.id)
+    }
+
+    get allBoxes() {
+      return ALL_BOXES
+    }
 
     get boxInfo() {
-      return ALL_BOXES[1]
+      return ALL_BOXES.find(boxInfo => boxInfo.id === this.selectedId)
     }
 
     get dropInfo () {
-      return {
-        cards: 6,
-        guaranteed: {
-          common: 0,
-          uncommon: 0,
-          rare: 0,
-          epic: 1,
-          legendary: 0
-        },
-        rates: {
-          common: 0.47,
-          uncommon: 0.28,
-          rare: 0.15,
-          epic: 0.08,
-          legendary: 0.02
-        }
+      return this.boxInfo.dropInfo
+    }
+
+    get ownsTendiesBox() {
+      return this.ownTendiesBoxes[this.selectedId]
+    }
+
+    sendToOpenSea() {
+      window.open('https://opensea.io/', '_blank')
+    }
+
+    async openBox() {
+      this.isOpening = true
+      try { 
+        await this.$ethereumService.openTendiesBox(this.selectedId, 1, () => this.isConfirming = true, this.displayOpenedCardsAndUpdateState)
+      } catch(e) {
+        console.error(e)
+        this.isOpening = false
       }
     }
 
-    openBox() {
+    selectBox(boxId) {
+      if (this.ownTendiesBoxes[boxId]) {
+        this.$router.push({ path: 'open', query: {id: boxId}})
+      }
+    }
+
+    displayOpenedCardsAndUpdateState(receipt) {
+      this.isConfirming = false
       this.isClosed = false
+      const transferEvents = receipt.events.TransferSingle
+      this.cardIds = transferEvents.filter((event) => event.returnValues.from === '0x0000000000000000000000000000000000000000').map(event => Number(event.returnValues.id))
+      // todo: update state with cards
+      setTimeout(() => this.getInventoryOfUser(), 2000) 
     }
   }
 </script>
@@ -85,6 +132,15 @@
     }
   }
 
+  &__boxes {
+    &__box + &__box {
+      margin-top: 1rem;
+    }
+    &__box {
+      opacity: 0.4;
+    }
+  }
+
   &__content {
     &__headline {
       font-weight: 500;
@@ -100,6 +156,28 @@
   &__main {
     margin-top: 2rem;
 
+    &--empty {
+      margin: 2rem 0;
+      text-align: center;
+      @include breakpoint(sm) {
+        margin: 4rem 0;
+      }
+    }
+
+    &__load {
+      margin: 4rem 0;
+      @extend %col;
+      span { 
+        display: block;
+        padding-top: 1rem;
+
+        &:last-of-type {
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+      }
+    }
+
     &__btns {
       margin: 2rem 0;
       @extend %row;
@@ -107,13 +185,16 @@
         margin-left: 2rem;
       }
       button { 
-        width: 100%;
         @extend %btn-primary;
-        @include breakpoint(sm) {
-          width: 12rem;
-        }
+        width: 100%;
         &:first-of-type {
           @extend %btn-secondary;
+        }
+        svg { 
+          margin-right: 0.5rem;
+        }
+        @include breakpoint(sm) {
+          width: 12rem;
         }
       }
     }
@@ -128,5 +209,9 @@
       }
     }
   }
+}
+
+.isSelected {
+  opacity: 1;
 }
 </style>

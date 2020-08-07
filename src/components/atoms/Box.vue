@@ -8,16 +8,21 @@
     .box__size(:class="{'box__size--large': isLarge}")
       span {{ boxInfo.size }}
       small Box
-  .box__owned {{boxInfo.copies}}x
+  .box__owned {{ownedCopies}}x
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { BoxInfo } from '~/types'
 @Component({})
   export default class Box extends Vue {
     @Prop() boxInfo!: BoxInfo
     @Prop({default: false}) isLarge?: boolean
+    @State ownTendiesBoxes
+
+    get ownedCopies() {
+      return this.ownTendiesBoxes[this.boxInfo.id]
+    }
   }
 </script>
 
@@ -31,7 +36,6 @@
   box-shadow: 0 0 0 rgba($color-brinkpink, 0);
   transition: 0.2s ease-in-out;
   border: 1px solid $color-koromiko;
-  cursor: pointer;
 
   @include breakpoint(sm) {
     padding: 1rem 2rem;

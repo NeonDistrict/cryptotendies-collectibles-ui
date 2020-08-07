@@ -1,16 +1,44 @@
 export const ALL_BOXES = [{
+  id: 1,
   size: 4,
-  copies: 3
+  dropInfo: {
+    cards: 4,
+    guaranteed: {
+      common: 0,
+      uncommon: 1,
+      rare: 0,
+      epic: 0,
+      legendary: 0
+    },
+    rates: {
+      common: 0.34,
+      uncommon: 0.31,
+      rare: 0.20,
+      epic: 0.11,
+      legendary: 0.04
+    }
+  }
 }, 
-{ size: 6,
-  copies: 4
-},
-{
-  size: 8,
-  copies: 2
-}, {
-  size: 12,
-  copies: 1
+{ 
+  id: 2,
+  size: 6, 
+  dropInfo: {
+    cards: 6,
+    guaranteed: {
+      common: 0,
+      uncommon: 0,
+      rare: 1,
+      epic: 0,
+      legendary: 0
+    },
+    rates: {
+      common: 0.47,
+      uncommon: 0.28,
+      rare: 0.15,
+      epic: 0.08,
+      legendary: 0.02
+    }
+  }
 }]
 export const ALL_CARDS = [{
   id: 1,

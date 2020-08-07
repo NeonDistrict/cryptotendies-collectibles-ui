@@ -2,7 +2,7 @@
 .flipping
   .flipping__wrapper
     .flipping__scene(
-      v-for="(card, index) in allCards" 
+      v-for="(card, index) in cardInfos" 
       @click="flipCard(index)"
     )
       .flipping__card(:class="{'flipping__card--flipped': isFlipped(index)}")
@@ -26,10 +26,12 @@
   }
 })
   export default class FlippingCards extends Vue {
+    @Prop() cardIds!: Array<Number>
     private flippedCards = []
 
-    get allCards() {
-      return ALL_CARDS
+    get cardInfos() {
+      // mocked with index until we have a real card mapping
+      return this.cardIds.map((cardId, index) => ALL_CARDS[index])
     }
 
     rarityStr(cardInfo) {

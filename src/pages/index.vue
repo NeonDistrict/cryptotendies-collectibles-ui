@@ -13,17 +13,17 @@
   .landing__packs(v-if="currentSelection === menu[0]")
     cards-list
   .landing__packs(v-if="currentSelection === menu[1]")
-    packs-list
+    box-list
 </template>
 
 <script lang="ts">
   import { Component, Vue, State } from 'nuxt-property-decorator'
-  import PacksList from '~/components/molecules/PacksList.vue'
+  import BoxList from '~/components/molecules/BoxList.vue'
   import CardsList from '~/components/molecules/CardsList.vue'
 
 @Component({
   components: {
-    PacksList,
+    BoxList,
     CardsList
   }
 })

@@ -7,7 +7,11 @@ export const state = () => ({
   error: null,
   didStartInit: false,
   finishedInit: false,
-  authStoppedAt: ''
+  authStoppedAt: '',
+  ownTendiesBoxes: {
+    1: 0,
+    2: 0
+  }
 })
 
 export const mutations = {
@@ -31,6 +35,12 @@ export const mutations = {
   },
   SET_ERROR_MESSAGE_FOR_DEV(state, error) {
     state.error = error
+  },
+  SET_OWN_TENDIES_BOXES(state, boxes) {
+    state.ownTendiesBoxes = {
+      1: Number(boxes[1]),
+      2: Number(boxes[2])
+    }
   }
 }
 
@@ -65,6 +75,7 @@ export const actions = {
     await commit('FINISH_INIT', false)
     try {
       await dispatch('setWeb3')
+      await dispatch('getInventoryOfUser')
     } catch (e) {
       await commit('SET_NEXT_AUTH_STEP', NEXT_AUTH_STEPS[3])
     } finally {
@@ -81,5 +92,20 @@ export const actions = {
     } catch (e) {
       console.error(e)
     }
+  },
+
+  async getInventoryOfUser ({ commit, state }, _context) {
+    // get boxes
+    try {
+      const boxId1Amount = await this.$ethereumService.getBalanceOfBox(state.ownAddress, '1')
+      const boxId2Amount = await this.$ethereumService.getBalanceOfBox(state.ownAddress, '2')
+      await commit('SET_OWN_TENDIES_BOXES', {
+        1: boxId1Amount,
+        2: boxId2Amount
+      })
+    } catch (e) {
+      console.error(e)
+    }
+    // todo: get cards
   }
 }

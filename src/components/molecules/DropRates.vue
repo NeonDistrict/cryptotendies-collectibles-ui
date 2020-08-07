@@ -11,17 +11,18 @@
   .drop-rates__header Owner
   .drop-rates__row
     .drop-rates__wrapper {{ownerShortened}}
-    .drop-rates__wrapper Owned: {{ boxInfo.copies }}x
+    .drop-rates__wrapper Owned: {{ ownedCopies }}x
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { RARITIES } from '~/assets/data/constants'
   import { DropInfo, BoxInfo } from '~/types'
 @Component({})
   export default class DropRates extends Vue {
     @Prop() dropInfo!: DropInfo
     @Prop() boxInfo!: BoxInfo
+    @State ownTendiesBoxes
     
     get rarities () {
       return RARITIES
@@ -44,6 +45,10 @@
 
     dropRatePercentage(dropRate) {
       return `${Math.round(dropRate * 1000) / 10}%`
+    }
+
+    get ownedCopies() {
+      return this.ownTendiesBoxes[this.boxInfo.id]
     }
 
   }

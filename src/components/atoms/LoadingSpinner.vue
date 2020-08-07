@@ -1,7 +1,7 @@
 <template <template lang="pug">
 .loading-spinner__wrapper 
   .loading-spinner
-  img(src="~/assets/images/tend.png")
+  img(src="~/assets/images/bucket.png")
 </template>
 
 <script>
@@ -16,7 +16,7 @@
   display: inline-block;
   box-sizing: border-box;
   border: 2px solid $color-main-background;
-  border-left-color: $color-meadow;
+  border-left-color: $color-koromiko;
   border-radius: 50%;
   height: 100%;
   width: 100%;
@@ -29,8 +29,8 @@
     width: 4rem;
 
     img {
-      height: 60%;
-      width: 60%;
+      height: 40%;
+      width: 40%;
     }
   }
   

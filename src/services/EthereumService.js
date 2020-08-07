@@ -1,13 +1,11 @@
 import Web3 from 'web3'
 import Notify from 'bnc-notify'
 import Web3Modal from "web3modal"
-
-// import Torus from "@toruslabs/torus-embed"
-// import WalletConnectProvider from "@walletconnect/web3-provider"
-// import Fortmatic from 'fortmatic'
-import ERC721Abi from '~/assets/data/ethereum/ERC721Abi.json'
-import ConverterAbi from '~/assets/data/ethereum/ConverterAbi.json'
-import { BLOCKNATIVE, FORTMATIC_KEY, INFURA_ID } from '~/assets/data/non_secret_keys.js'
+import WalletConnectProvider from "@walletconnect/web3-provider"
+import TendiesBoxAbi from '~/assets/data/ethereum/TendiesBox.abi.json'
+import TendiesCardAbi from '~/assets/data/ethereum/TendiesCard.abi.json'
+import contractsList from '~/assets/data/ethereum/contractsList.json'
+import { BLOCKNATIVE, INFURA_ID } from '~/assets/data/non_secret_keys.js'
 
 const providerOptions = {
   // fortmatic: {
@@ -19,12 +17,12 @@ const providerOptions = {
   // torus: {
   //   package: Torus, // required
   // },
-  // walletconnect: {
-  //   package: WalletConnectProvider, // required
-  //   options: {
-  //     infuraId: INFURA_ID // required
-  //   }
-  // }
+  walletconnect: {
+    package: WalletConnectProvider, // required
+    options: {
+      infuraId: INFURA_ID // required
+    }
+  }
 };
 
 const web3Modal = new Web3Modal({
@@ -130,6 +128,16 @@ export default class EthereumService {
     return this.web3.eth.net.getId()
   }
 
+  getTendiesBoxContract() {
+    const address = contractsList.TENDIES_BOX[this.store.state.networkId]
+    return new this.web3.eth.Contract(TendiesBoxAbi, address)
+  }
+
+  getTendiesCardContract() {
+    const address = contractsList.TENDIES_CARD[this.store.state.networkId]
+    return new this.web3.eth.Contract(TendiesCardAbi, address)
+  }
+
   getERC721Contract (address) {
     return new this.web3.eth.Contract(ERC721Abi, address)
   }
@@ -159,6 +167,60 @@ export default class EthereumService {
       default:
         return ''
     }
+  }
+
+  async mintTendiesBox(toAddress, tendiesBoxId, numBoxesToMint, callbackAfterSend = () => {}, callbackAfterSuccess = () => {}) {
+    const notify = Notify({
+      dappId: BLOCKNATIVE, // [String] The API key created by step one above
+      networkId: this.store.state.networkId // [Integer] The Ethereum network ID your Dapp uses.
+    })
+
+    notify.config({
+      mobilePosition: 'bottom'
+    })
+
+    const contract = await this.getTendiesBoxContract()
+    return contract.methods
+      .mint(toAddress, tendiesBoxId, numBoxesToMint, "0x0")
+      .send({ from: this.store.state.ownAddress })
+      .on('transactionHash', function (hash) {
+        notify.hash(hash)
+        callbackAfterSend()
+      })
+      .on('receipt', function (receipt) {
+        callbackAfterSuccess()
+        console.info(receipt)
+      })
+  }
+
+  async openTendiesBox(tendiesBoxId, numBoxesToOpen, callbackAfterSend, callbackAfterSuccess) {
+    if (numBoxesToOpen > 5) return new Error('Cannot open more than 5 boxes')
+    const notify = Notify({
+      dappId: BLOCKNATIVE, // [String] The API key created by step one above
+      networkId: this.store.state.networkId // [Integer] The Ethereum network ID your Dapp uses.
+    })
+
+    notify.config({
+      mobilePosition: 'bottom'
+    })
+
+    const contract = await this.getTendiesBoxContract()
+    return contract.methods
+      .open(tendiesBoxId, numBoxesToOpen)
+      .send({ from: this.store.state.ownAddress })
+      .on('transactionHash', function (hash) {
+        notify.hash(hash)
+        callbackAfterSend && callbackAfterSend()
+      })
+      .on('receipt', function (receipt) {
+        callbackAfterSuccess && callbackAfterSuccess(receipt)
+        console.info(receipt)
+      })
+  }
+
+  async getBalanceOfBox(userAddress, tendiesBoxId) {
+    const contract = await this.getTendiesBoxContract()
+    return contract.methods.balanceOf(userAddress, tendiesBoxId).call()
   }
 
   async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {
