@@ -7,3 +7,4 @@ dist/
 *.retry
 package-lock.json
 sw.*
+yarn.lock
