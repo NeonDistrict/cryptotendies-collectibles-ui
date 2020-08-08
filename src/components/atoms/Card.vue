@@ -8,11 +8,11 @@ nuxt-link.card(
   .card__wrapper(
     :class="`card__wrapper--${rarityStr}`"
   )
-    .card__wrapper__blur(:style="`background-image: url(${require(`~/assets/images/memes/${cardInfo.image}.png`)})`")
-    img.card__wrapper__img(:src="require(`~/assets/images/memes/${cardInfo.image}.png`)")
+    .card__wrapper__blur(:style="`background-image: url(${cardInfo.image})`")
+    img.card__wrapper__img(:src="cardInfo.image")
   .card__owned(v-if="showOwned") 
     fa-icon(v-if="isFetchingAssetCount" :icon="['fas', 'spinner']" spin)
-    span(v-else) {{cardInfo.count || 0}}x
+    span(v-else) {{cardInfo.count ? `${cardInfo.count}x` : '-'}}
 </template>
 
 <script lang="ts">

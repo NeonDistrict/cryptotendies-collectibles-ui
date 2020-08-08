@@ -117,6 +117,7 @@
 
   &__link {
     @extend %row;
+    justify-content: flex-start;
   }
 
   &__logo {

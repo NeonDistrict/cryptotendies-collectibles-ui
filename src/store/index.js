@@ -10,6 +10,7 @@ export const state = () => ({
   isFetchingAssetCount: false,
   inventoryLoaded: false,
   authStoppedAt: '',
+  cardUri: '',
   ownTendiesBoxes: {
     1: {},
     2: {}
@@ -51,6 +52,9 @@ export const mutations = {
   SET_INVENTORY_LOADED(state, flag) {
     state.inventoryLoaded = flag
   },
+  SET_CARD_URI(state, flag) {
+    state.cardUri = flag
+  },
 }
 
 
@@ -84,6 +88,7 @@ export const actions = {
     await commit('FINISH_INIT', false)
     try {
       await dispatch('setWeb3')
+      await dispatch('getCardUri')
       await dispatch('getInventoryOfUser', { fetchBoxes: true, fetchCards: true })
     } catch (e) {
       await commit('SET_NEXT_AUTH_STEP', NEXT_AUTH_STEPS[3])
@@ -101,6 +106,11 @@ export const actions = {
     } catch (e) {
       console.error(e)
     }
+  },
+
+  async getCardUri ({ commit, dispatch, state }, _ctx ) {
+    const uri = await this.$ethereumService.getCardUri()
+    await commit('SET_CARD_URI', uri)
   },
 
   async getInventoryOfUser ({ commit, dispatch, state }, { fetchBoxes = true, fetchCards = true }) {
@@ -123,6 +133,7 @@ export const actions = {
       if (fetchCards) {
         const ownedCards = await this.$openSeaService.getOwnedCards(networkId, ownAddress)
         if (ownedCards) {
+          console.log('cards: ', ownedCards)
           ownedCards.forEach(cardInfo => {
             cardsMap[cardInfo.id] = cardInfo
           })

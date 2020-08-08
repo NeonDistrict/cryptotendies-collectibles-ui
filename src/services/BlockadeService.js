@@ -30,4 +30,8 @@ export default class BlockadeService {
   async getOwnedBoxes(networkId, ownAddress) {
     return await this.getAllTokensByContract(networkId, ownAddress, TENDIES_BOX[networkId])
   }
+
+  async getCardInfo(uri, cardId) {
+    return await this.axios.$get(`${uri}${cardId}`, {})
+  }
 }

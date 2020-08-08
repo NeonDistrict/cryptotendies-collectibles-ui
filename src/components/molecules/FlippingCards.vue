@@ -1,6 +1,10 @@
 <template lang="pug">
 .flipping
-  .flipping__wrapper
+  .flipping__load(v-if="isFetching")
+    loading-spinner
+    span Serving Fresh Cards... 
+    span Just a few more seconds.
+  .flipping__wrapper(v-else)
     .flipping__scene(
       v-for="(card, index) in cardInfos" 
       @click="flipCard(index)"
@@ -19,21 +23,36 @@
   import { ALL_CARDS } from '~/assets/data/db/mocked'
   import Card from '~/components/atoms/Card.vue'
   import CardBack from '~/components/atoms/CardBack.vue'
+  import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
 @Component({
   components: {
     Card,
-    CardBack
+    CardBack,
+    LoadingSpinner
   }
 })
   export default class FlippingCards extends Vue {
     @Prop() cardIds!: Array<Number>
     @State ownTendiesCards
+    @State cardUri
     private flippedCards = []
+    private cardInfos = []
+    private isFetching = true
 
-    get cardInfos() {
-      // mocked with index until we have a real card mapping
-      // todo: Add master spreadsheet with master data
-      return this.cardIds.map((cardId, index) => ALL_CARDS[index])
+    async beforeMount() {
+      const cardInfos = await this.getCardInfos()
+      console.log(cardInfos)
+      this.cardInfos = cardInfos
+      this.isFetching = false
+    }
+
+    async getCardInfos() {
+      return await Promise.all(this.cardIds.map(async (cardId) => {
+        const cardInfo = await this.$blockadeService.getCardInfo(this.cardUri, cardId)
+        cardInfo.rarity = this.getRarityIdByTrait(cardInfo.attributes)
+        cardInfo.id = cardId
+        return cardInfo
+      }))
     }
 
     rarityStr(cardInfo) {
@@ -53,6 +72,18 @@
     flipCard(cardIndex) {
       this.flippedCards.push(cardIndex)
     }
+
+    getRarityIdByTrait(attributes) {
+      const rarity = attributes.find(trait => trait.traitType === 'Rarity')
+      if (!rarity) return 1
+      switch (rarity.value.toLowerCase()) {
+        case 'common': return 1
+        case 'uncommon': return 2
+        case 'rare': return 3
+        case 'epic': return 4
+        case 'legendary': return 5
+      }
+    }
   }
 </script>
 
@@ -70,6 +101,20 @@
       grid-template-columns:  repeat(auto-fill, minmax(12rem, 1fr));
     } 
   }
+
+  &__load {
+      margin: 4rem 0;
+      @extend %col;
+      span { 
+        display: block;
+        padding-top: 1rem;
+
+        &:last-of-type {
+          font-size: 0.8rem;
+          opacity: 0.8;
+        }
+      }
+    }
 
   &__scene {
     height: 12rem;

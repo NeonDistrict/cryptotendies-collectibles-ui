@@ -6,18 +6,18 @@
       :cardInfo="cardInfo"
     )
     .view-card__content
-      .view-card__content__headline Tendies Wings of Desire
+      .view-card__content__headline {{ cardInfo.name }}
       //- drop-rates(
       //-   :dropInfo="dropInfo"
       //- )
-      .view-card__content__text Tendies understands you. You have desires, Tendies has answers. Following the path of Tendies will fulfill your crispiest dreams. And if all else fails, Mommy is here for you.
+      .view-card__content__text {{ cardInfo.description }}
       card-meta-data(
         :cardInfo="cardInfo"
       )
   .view-card__main
     .view-card__main__btns
-      button Sell Card
-      button Shill on Twitter
+      button(@click="linkToOpenSea") Sell Card
+      button(@click="linkToTwitter") Shill on Twitter
 </template>
 
 <script lang="ts">
@@ -25,6 +25,7 @@
   import { ALL_CARDS } from '~/assets/data/db/mocked'
   import Card from '~/components/atoms/Card.vue'
   import CardMetaData from '~/components/molecules/CardMetaData.vue'
+  import { CardInfo } from '~/types'
 @Component({
   components: {
     Card,
@@ -33,12 +34,41 @@
 })
   export default class ViewCard extends Vue {
     @State ownTendiesCards
-    get cardInfo() {
-      return this.ownTendiesCards[Number(this.cardId)]
+    @State cardUri
+    private cardInfo = {} as CardInfo
+
+    async mounted() {
+      let cardInfo = this.ownTendiesCards[Number(this.cardId)] 
+      if (!cardInfo) {
+        cardInfo = await this.$blockadeService.getCardInfo(this.cardUri, this.cardId)
+        cardInfo.rarity = this.getRarityIdByTrait(cardInfo.attributes)
+        cardInfo.id = this.cardId
+      }
+      this.cardInfo = cardInfo
     }
 
     get cardId() {
       return this.$route.params.cardId
+    }
+
+    linkToOpenSea() {
+      window.open(this.cardInfo.link, '_blank')
+    }
+
+    linkToTwitter() {
+      window.alert('todo: Twitter Share Link')
+    }
+
+    getRarityIdByTrait(attributes) {
+      const rarity = attributes.find(trait => trait.traitType === 'Rarity')
+      if (!rarity) return 1
+      switch (rarity.value.toLowerCase()) {
+        case 'common': return 1
+        case 'uncommon': return 2
+        case 'rare': return 3
+        case 'epic': return 4
+        case 'legendary': return 5
+      }
     }
   }
 </script>

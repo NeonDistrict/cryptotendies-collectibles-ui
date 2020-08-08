@@ -4,7 +4,7 @@ import BlockadeService from '~/services/BlockadeService'
 
 interface InterfaceTemplate {
   $openSeaService: OpenSeaService,
-  $threeBoxService: BlockadeService
+  $blockadeService: BlockadeService
 }
 
 declare module 'vue/types/vue' {

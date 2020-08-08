@@ -10,8 +10,7 @@
         :boxInfo="box"
       )
       .boxList__buttons
-        button(@click="sendToOpenSea(box)" :disable="!ownedCopies(box)") Trade
-        button(@click="sendToOpen(box)" :disable="!ownedCopies(box)") Open
+        button(@click="sendToOpen(box)" :disable="!ownedCopies(box)") Details
 </template>
 
 <script lang="ts">
@@ -38,11 +37,6 @@
       if (!this.ownedCopies(boxInfo)) return
       this.$router.push({ path: 'open', query: {id: boxInfo.id}})
     }
-
-    sendToOpenSea(boxInfo) {
-      if (!this.ownedCopies(boxInfo)) return
-      window.open('https://opensea.io/', '_blank')
-    }
   }
 </script>
 
@@ -67,9 +61,8 @@
     justify-content: space-around;
     button { 
       @extend %btn-primary--small;
-      &:first-of-type {
-        @extend %btn-secondary--small;
-      }
+      width: 100%;
+      margin: 0 1rem;
     }
   }
 }

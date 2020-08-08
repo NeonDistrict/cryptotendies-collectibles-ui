@@ -25,7 +25,7 @@
       span Getting your serving ready. 
       span This could take a while, please don't close this tab.
     .open__main__btns(v-else-if="isClosed")
-      button(sendToOpenSea) Sell Box
+      button(@click="sendToOpenSea") Sell Box
       button(@click="openBox" :disabled="isOpening") 
         fa-icon(v-if="isOpening" :icon="['fas', 'spinner']" spin)
         span Open Box
@@ -86,7 +86,7 @@
     }
 
     sendToOpenSea() {
-      window.open('https://opensea.io/', '_blank')
+      window.open(this.ownTendiesBoxes[this.selectedId].link, '_blank')
     }
 
     openNext() {

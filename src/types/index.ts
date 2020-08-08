@@ -30,6 +30,10 @@ export interface CardInfo {
   image: number,
   rarity: number,
   count: number
+  traits: Array<any>,
+  link: string,
+  name: string,
+  description: string
 }
 
 export interface BoxInfo {

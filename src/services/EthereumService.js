@@ -222,6 +222,12 @@ export default class EthereumService {
     return contract.methods.balanceOf(userAddress, tendiesCardId).call()
   }
 
+  async getCardUri() {
+    const contract = await this.getTendiesCardContract()
+    const uri = await contract.methods.uri(1).call()
+    return uri.replace('{id}', '')
+  }
+
   async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {
     const notify = Notify({
       dappId: BLOCKNATIVE, // [String] The API key created by step one above

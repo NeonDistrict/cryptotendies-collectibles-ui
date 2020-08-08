@@ -4,7 +4,7 @@
   .drop-rates__row
     .drop-rates__wrapper Rarity: 
       span.drop-rates__wrapper__rarity(:class="rarityStr") {{rarityStr}}
-    .drop-rates__wrapper Supply: {{ cardInfo.supply }}
+    .drop-rates__wrapper Supply: {{ cardInfo.supply || 10 }}
   .drop-rates__header Owner
   .drop-rates__row
     .drop-rates__wrapper {{ownerShortened}}
