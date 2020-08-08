@@ -26,12 +26,14 @@ export interface DropInfo {
 }
 
 export interface CardInfo {
+  id: number,
   image: number,
   rarity: number,
-  copies: number
+  count: number
 }
 
 export interface BoxInfo {
   id: number,
-  size: number
+  size: number,
+  count: number
 }

@@ -3,6 +3,7 @@ src/VERSION
 .lego/accounts/
 keystore
 pass
+ngrok
 
 *.log
 # .keys/*

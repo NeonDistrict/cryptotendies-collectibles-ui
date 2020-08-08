@@ -31,7 +31,7 @@
     }
 
     ownedCopies(boxInfo) {
-      return this.ownTendiesBoxes[boxInfo.id]
+      return this.ownTendiesBoxes[boxInfo.id].count
     }
 
     sendToOpen(boxInfo) {

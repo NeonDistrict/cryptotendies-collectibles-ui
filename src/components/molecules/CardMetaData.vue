@@ -8,7 +8,7 @@
   .drop-rates__header Owner
   .drop-rates__row
     .drop-rates__wrapper {{ownerShortened}}
-    .drop-rates__wrapper Owned: {{ cardInfo.copies }}x
+    .drop-rates__wrapper Owned: {{ cardInfo.count }}x
 </template>
 
 <script lang="ts">

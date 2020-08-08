@@ -8,7 +8,9 @@
     .box__size(:class="{'box__size--large': isLarge}")
       span {{ boxInfo.size }}
       small Box
-  .box__owned {{ownedCopies}}x
+  .box__owned 
+    fa-icon(v-if="isFetchingAssetCount" :icon="['fal', 'spinner']" spin)
+    span(v-else) {{myBoxInfo.count || 0}}x
 </template>
 
 <script lang="ts">
@@ -19,8 +21,9 @@
     @Prop() boxInfo!: BoxInfo
     @Prop({default: false}) isLarge?: boolean
     @State ownTendiesBoxes
+    @State isFetchingAssetCount
 
-    get ownedCopies() {
+    get myBoxInfo() {
       return this.ownTendiesBoxes[this.boxInfo.id]
     }
   }
@@ -129,6 +132,10 @@
     font-size: 0.8rem;
     font-weight: 500;
     color: rgba(white, 0.8);
+
+    svg {
+      font-size: 0.8rem;
+    }
   }
 
 }

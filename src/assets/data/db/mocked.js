@@ -11,11 +11,11 @@ export const ALL_BOXES = [{
       legendary: 0
     },
     rates: {
-      common: 0.34,
-      uncommon: 0.31,
-      rare: 0.20,
-      epic: 0.11,
-      legendary: 0.04
+      common: 0.47,
+      uncommon: 0.28,
+      rare: 0.15,
+      epic: 0.08,
+      legendary: 0.02
     }
   }
 }, 
@@ -32,11 +32,11 @@ export const ALL_BOXES = [{
       legendary: 0
     },
     rates: {
-      common: 0.47,
-      uncommon: 0.28,
-      rare: 0.15,
-      epic: 0.08,
-      legendary: 0.02
+      common: 0.34,
+      uncommon: 0.31,
+      rare: 0.20,
+      epic: 0.11,
+      legendary: 0.04
     }
   }
 }]
@@ -77,3 +77,28 @@ export const ALL_CARDS = [{
   copies: 10,
   supply: 500
 }]
+
+// key = rarity
+// value = lastId with that rarity
+export const RARITY_MAPPING = {
+  1: 60,
+  2: 100,
+  3: 125,
+  4: 140,
+  5: 150
+}
+
+export const getRarityFromCardId = (cardId) => {
+  let rarity = 1
+  for (let key in RARITY_MAPPING) {
+    if (cardId > Number(RARITY_MAPPING[key])) {
+      rarity = Number(key) + 1
+    }
+  }
+  return rarity
+}
+
+export const getBoxInfoFromId = (boxId) => {
+  const boxInfo = ALL_BOXES.find(boxInfo => boxInfo.id === boxId)
+  return boxInfo || {}
+}

@@ -8,14 +8,14 @@
     img.topbar__logo(src="~assets/images/tend.png")
     .topbar__title Tendies Collectibles
   .topbar__wallet
+    //- button(
+    //-   v-if="!hasWallet"
+    //-   @click="sendToMetamask"
+    //- ) No Wallet
     button(
-      v-if="!hasWallet"
-      @click="sendToMetamask"
-    ) No Wallet
-    button(
-      v-else-if="isWalletLocked"
+      v-if="isWalletLocked"
       @click="unlockWallet"
-    ) Unlock Wallet
+    ) Connect Wallet
     span(v-else) {{ shortenedAddress }}
 </template>
 

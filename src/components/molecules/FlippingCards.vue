@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { ALL_CARDS } from '~/assets/data/db/mocked'
   import Card from '~/components/atoms/Card.vue'
   import CardBack from '~/components/atoms/CardBack.vue'
@@ -27,10 +27,12 @@
 })
   export default class FlippingCards extends Vue {
     @Prop() cardIds!: Array<Number>
+    @State ownTendiesCards
     private flippedCards = []
 
     get cardInfos() {
       // mocked with index until we have a real card mapping
+      // todo: Add master spreadsheet with master data
       return this.cardIds.map((cardId, index) => ALL_CARDS[index])
     }
 

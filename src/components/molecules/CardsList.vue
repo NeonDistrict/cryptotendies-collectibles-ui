@@ -2,7 +2,7 @@
 .cardsList
   .cardsList__wrapper
     card(
-      v-for="(card, index) in allCards" 
+      v-for="(card, index) in allMyCards" 
       :key="index"
       :cardInfo="card"
       :showOwned="true"
@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { ALL_CARDS } from '~/assets/data/db/mocked'
   import Card from '~/components/atoms/Card.vue'
 @Component({
@@ -19,9 +19,10 @@
   }
 })
   export default class CardsList extends Vue {
+    @State ownTendiesCards
 
-    get allCards() {
-      return ALL_CARDS
+    get allMyCards() {
+      return this.ownTendiesCards
     }
   }
 </script>

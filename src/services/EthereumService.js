@@ -87,12 +87,6 @@ export default class EthereumService {
       this.provider = await web3Modal.connect()
       this.web3 = new Web3(this.provider)
       await this.store.dispatch('setWeb3')
-      if (!this.store.state.isLoggedIn) {
-        await this.store.commit('SET_NEXT_AUTH_STEP', 'NOT_LOGGED_IN')
-        await this.store.commit('FINISH_INIT', true)
-        return
-      }
-      // finishing login
       await this.store.dispatch('startupFunctions')
       await this.store.commit('FINISH_INIT', true)
     } catch (e) {
@@ -213,14 +207,19 @@ export default class EthereumService {
         callbackAfterSend && callbackAfterSend()
       })
       .on('receipt', function (receipt) {
-        callbackAfterSuccess && callbackAfterSuccess(receipt)
         console.info(receipt)
+        callbackAfterSuccess && callbackAfterSuccess(receipt)
       })
   }
 
   async getBalanceOfBox(userAddress, tendiesBoxId) {
     const contract = await this.getTendiesBoxContract()
     return contract.methods.balanceOf(userAddress, tendiesBoxId).call()
+  }
+
+  async getBalanceOfCard(userAddress, tendiesCardId) {
+    const contract = await this.getTendiesCardContract()
+    return contract.methods.balanceOf(userAddress, tendiesCardId).call()
   }
 
   async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {

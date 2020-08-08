@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { ALL_CARDS } from '~/assets/data/db/mocked'
   import Card from '~/components/atoms/Card.vue'
   import CardMetaData from '~/components/molecules/CardMetaData.vue'
@@ -32,8 +32,9 @@
   }
 })
   export default class ViewCard extends Vue {
+    @State ownTendiesCards
     get cardInfo() {
-      return ALL_CARDS[Number(this.cardId) - 1]
+      return this.ownTendiesCards[Number(this.cardId)]
     }
 
     get cardId() {

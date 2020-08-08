@@ -63,6 +63,7 @@
     @State ownTendiesBoxes
     @State chainId
     @Action getInventoryOfUser
+    @Action getAssetCount
 
     get selectedId () {
       return Number(this.$route.query.id)
@@ -106,7 +107,7 @@
     }
 
     selectBox(boxId) {
-      if (this.ownTendiesBoxes[boxId]) {
+      if (this.ownTendiesBoxes[boxId].count) {
         this.$router.push({ path: 'open', query: {id: boxId}})
       }
     }
@@ -114,10 +115,11 @@
     displayOpenedCardsAndUpdateState(receipt) {
       this.isConfirming = false
       this.isClosed = false
-      const transferEvents = receipt.events.TransferSingle
-      this.cardIds = transferEvents.filter((event) => event.returnValues.from === '0x0000000000000000000000000000000000000000').map(event => Number(event.returnValues.id))
-      // todo: update state with cards
-      setTimeout(() => this.getInventoryOfUser(), 2000) 
+      this.cardIds = receipt.events.TransferBatch.returnValues.ids
+      setTimeout(async () => {
+        await this.getInventoryOfUser({ fetchBoxes: false, fetchCards: true })
+        await this.getAssetCount()
+      }, 2000) 
     }
   }
 </script>

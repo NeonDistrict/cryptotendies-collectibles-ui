@@ -10,17 +10,20 @@ nuxt-link.card(
   )
     .card__wrapper__blur(:style="`background-image: url(${require(`~/assets/images/memes/${cardInfo.image}.png`)})`")
     img.card__wrapper__img(:src="require(`~/assets/images/memes/${cardInfo.image}.png`)")
-  .card__owned(v-if="showOwned") {{cardInfo.copies}}x
+  .card__owned(v-if="showOwned") 
+    fa-icon(v-if="isFetchingAssetCount" :icon="['fal', 'spinner']" spin)
+    span(v-else) {{cardInfo.count || 0}}x
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State} from 'nuxt-property-decorator'
   import { CardInfo } from '~/types'
 @Component({})
   export default class Card extends Vue {
     @Prop() cardInfo!: CardInfo
     @Prop({default: false}) isLarge!: boolean
     @Prop({default: false}) showOwned!: boolean
+    @State isFetchingAssetCount
 
     get rarityStr() {
       switch(this.cardInfo.rarity) {
@@ -137,6 +140,10 @@ nuxt-link.card(
     font-size: 0.8rem;
     font-weight: 500;
     color: rgba(white, 0.8);
+
+    svg {
+      font-size: 0.8rem;
+    }
   }
   &__rarity {
     position: absolute;
@@ -154,83 +161,3 @@ nuxt-link.card(
   }
 }
 </style>
-
-// &__wrapper {
-//     position: relative;
-//     z-index: 1;
-//     width: 100%;
-//     padding-bottom: 150%;
-//     perspective: 1000px;
-
-//     &__cover {
-//       position: absolute;
-//       z-index: 1;
-//       top: 0;
-//       left: 0;
-//       width: 100%;
-//       height: 100%;
-//       overflow: hidden;
-//       background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
-//       background-size: cover;
-//       perspective-origin: 50% 50%;
-//       transform-style: preserve-3d;
-//       transform-origin: top center;
-//       will-change: transform;
-//       transform: skewX(.001deg);
-//       background-color: $color-mako;
-//       border-radius: 0.25rem;
-//       box-shadow: 0 0 8px rgba($color-woodsmoke, 0.7);
-//       transition: 0.2s ease-in-out;
-//       cursor: pointer;
-      
-//       // Gloss 
-      
-//       &::after {
-//         display: block;
-//         content: '';
-//         position: absolute;
-//         z-index: 100;
-//         top: 0;
-//         left: 0;
-//         width: 100%;
-//         height: 120%;
-//         background: linear-gradient(226deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.4) 35%, rgba(255,255,255,0.2) 42%, rgba(255,255,255,0) 60%);
-//         transform: translateY(-20%);
-//         will-change: transform;
-//         transition: transform .65s cubic-bezier(0.18, 0.9, 0.58, 1);
-//       }
-      
-//     }
-    
-//     &:hover &__cover {
-//       transform: rotateX(7deg) translateY(-6px);
-
-//       &::after {
-//         transform: translateY(0%);
-//       }
-      
-//     }
-    
-//     // Shadows
-    
-//     &::before {
-//       display: block;
-//       content: '';
-//       position: absolute;
-//       top: 5%;
-//       left: 5%;
-//       width: 90%;
-//       height: 90%;
-//       background: rgba(#000000, 0.5);
-//       box-shadow: 0 6px 12px 12px rgba(#000000, 0.4);
-//       will-change: opacity;
-//       transform-origin: top center;
-//       transform: skewX(.001deg);
-//       transition: transform .35s ease-in-out, opacity .5s ease-in-out;
-//     }
-    
-//     &:hover::before {
-//       opacity: 0.6;
-//       transform: rotateX(7deg) translateY(-6px) scale(1.05);
-//     }
-//   }
