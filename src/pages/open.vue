@@ -27,7 +27,7 @@
     .open__main__btns(v-else-if="isClosed")
       button(sendToOpenSea) Sell Box
       button(@click="openBox" :disabled="isOpening") 
-        fa-icon(v-if="isOpening" :icon="['fal', 'spinner']" spin)
+        fa-icon(v-if="isOpening" :icon="['fas', 'spinner']" spin)
         span Open Box
     .open__main__open(v-else)
       span Mommy knows you are a Good Boy

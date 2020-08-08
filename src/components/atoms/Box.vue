@@ -9,7 +9,7 @@
       span {{ boxInfo.size }}
       small Box
   .box__owned 
-    fa-icon(v-if="isFetchingAssetCount" :icon="['fal', 'spinner']" spin)
+    fa-icon(v-if="isFetchingAssetCount" :icon="['fas', 'spinner']" spin)
     span(v-else) {{myBoxInfo.count || 0}}x
 </template>
 

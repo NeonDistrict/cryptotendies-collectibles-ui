@@ -1,32 +1,9 @@
-src/VERSION
-
-.lego/accounts/
-keystore
-pass
 ngrok
-
 *.log
-# .keys/*
-# !.keys/genkey.sh
-
 .nuxt/
-.idea/
-.envrc
 node_modules/
 dist/
-.npmrc
-.env
 .DS_Store
 *.retry
 package-lock.json
 sw.*
-
-# Contract builds
-# build/*
-# !/build/contracts
-# /build/contracts/*
-# !build/contracts/HeroManager.json
-# !build/contracts/ExtensionAsset.json
-# !build/contracts/GumGateway.json
-# !build/contracts/HeroGateway.json
-# !build/contracts/ERC20.json

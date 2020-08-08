@@ -31,7 +31,7 @@
     @click="mintBoxes"
     :disabled="isMinting"
   )
-    fa-icon(v-if="isMinting" :icon="['fal', 'spinner']" spin)
+    fa-icon(v-if="isMinting" :icon="['fas', 'spinner']" spin)
     span Mint
 </template>
 

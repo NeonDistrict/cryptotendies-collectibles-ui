@@ -11,7 +11,7 @@ nuxt-link.card(
     .card__wrapper__blur(:style="`background-image: url(${require(`~/assets/images/memes/${cardInfo.image}.png`)})`")
     img.card__wrapper__img(:src="require(`~/assets/images/memes/${cardInfo.image}.png`)")
   .card__owned(v-if="showOwned") 
-    fa-icon(v-if="isFetchingAssetCount" :icon="['fal', 'spinner']" spin)
+    fa-icon(v-if="isFetchingAssetCount" :icon="['fas', 'spinner']" spin)
     span(v-else) {{cardInfo.count || 0}}x
 </template>
 
