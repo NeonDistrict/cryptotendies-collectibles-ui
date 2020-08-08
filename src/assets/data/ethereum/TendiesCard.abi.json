@@ -2,6 +2,11 @@
   {
     "inputs": [
       {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "_proxyRegistryAddress",
         "type": "address"
