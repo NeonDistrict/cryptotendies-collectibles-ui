@@ -2,10 +2,11 @@
 .cardsList
   .cardsList__wrapper
     card(
-      v-for="(card, index) in allMyCards" 
-      :key="index"
-      :cardInfo="card"
+      v-for="cardId in allMyCardIds" 
+      :key="cardId"
+      :cardId="Number(cardId)"
       :showOwned="true"
+      :clickable="true"
     )
 </template>
 
@@ -21,8 +22,8 @@
   export default class CardsList extends Vue {
     @State ownTendiesCards
 
-    get allMyCards() {
-      return this.ownTendiesCards
+    get allMyCardIds() {
+      return Object.keys(this.ownTendiesCards) as Array<string>
     }
   }
 </script>

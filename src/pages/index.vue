@@ -58,6 +58,7 @@
     img { 
       width: auto;
       height: 30vh;
+      max-height: 450px;
       @include breakpoint(sm) {
         width: auto;
         height: 40vh;

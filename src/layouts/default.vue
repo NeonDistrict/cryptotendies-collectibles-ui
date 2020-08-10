@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue, State, Watch, Action } from 'nuxt-property-decorator'
+  import { Component, Vue, State } from 'nuxt-property-decorator'
   import { NEXT_AUTH_STEPS } from '~/assets/data/constants'
   import TopBar from '~/components/organisms/TopBar.vue'
   import AppFooter from '~/components/organisms/AppFooter.vue'
@@ -32,13 +32,6 @@
     @State finishedInit
     @State authStoppedAt
     @State inventoryLoaded
-    @Action getAssetCount
-
-    @Watch('inventoryLoaded', { immediate: true })
-     onUntilChanged (val, oldVal) {
-      if (!val) return
-      this.getAssetCount()
-     }
   }
 </script>
 

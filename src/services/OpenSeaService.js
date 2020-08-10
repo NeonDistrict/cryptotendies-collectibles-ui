@@ -7,9 +7,8 @@ const BASEURL = 'https://api.opensea.io/api/v1'
 const RINKEBY_BASEURL = 'https://rinkeby-api.opensea.io/api/v1'
 
 export default class OpenSeaService {
-  constructor (axios, locale, _isDev) {
+  constructor (axios, _isDev) {
     this.axios = axios
-    this.locale = locale
   }
 
   baseUrl (networkId) {
@@ -36,7 +35,6 @@ export default class OpenSeaService {
 
   async getOwnedBoxes(networkId, ownerAddress) {
     const ownedBoxes = await this.fetch(`${this.baseUrl(networkId)}/assets?asset_contract_address=${TENDIES_BOX[networkId]}&owner=${ownerAddress}`)
-    console.log(ownedBoxes)
     if (ownedBoxes) {
       return ownedBoxes.assets.map(cardInfo => new TendiesBox(cardInfo))
     } else {

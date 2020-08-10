@@ -25,19 +25,43 @@ export interface DropInfo {
   }
 }
 
+export interface OwnCardInfo {
+  amount: number,
+  count: number,
+  id: number
+}
+
+export interface OwnBoxInfo {
+  amount: number,
+  count: number,
+  id: number
+}
+
 export interface CardInfo {
   id: number,
-  image: number,
-  rarity: number,
-  count: number
-  traits: Array<any>,
-  link: string,
   name: string,
   description: string
+  image: number,
+  rarity: number,
+  link: string,
+  crispiness: number,
+  seasoning: number,
+  tenderness: number,
+  set: number,
+  setId: number,
+  setName: string
 }
 
 export interface BoxInfo {
-  id: number,
+  name: string,
+  description: string
   size: number,
-  count: number
+  image: number,
+  id: number,
+  classes: Array<string>,
+  guaranteedClasses: Array<string>,
+  probabilities: Array<number>,
+  setId: number,
+  setName: string,
+  link: string,
 }

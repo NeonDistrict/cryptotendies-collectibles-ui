@@ -3,14 +3,14 @@
   .open__wrapper
     .open__boxes
       .open__boxes__box(
-        v-for="boxInfo in allBoxes"
-        :key="boxInfo.id"
-        :class="{isSelected: boxInfo.id === selectedId, selectable: ownTendiesBoxes[boxInfo.id]}"
-        @click="() => selectBox(boxInfo.id)"
+        v-for="boxId in allBoxesArray"
+        :key="boxId"
+        :class="{isSelected: boxId === selectedId, selectable: hasBox(boxId)}"
+        @click="() => selectBox(boxId)"
       )
         box(
           :isLarge="true"
-          :boxInfo="boxInfo"
+          :boxId="boxId"
         )
     .open__content
       .open__content__headline {{boxInfo.dropInfo.cards}}-Piece Tendie Box
@@ -33,10 +33,17 @@
       span Mommy knows you are a Good Boy
       flipping-cards.open__main__cards(
         :cardIds="cardIds"
+        @open-card-modal="openCardModal"
       )
       button(@click="openNext") Open Next Box
   .open__main(v-else) 
     .open__main--empty 🐔 No owned Tendies Boxes found.
+
+  card-modal(
+    v-if="cardDetailsId"
+    :cardId="cardDetailsId"
+    @modal-close="closeCardModal"
+  )
 </template>
 
 <script lang="ts">
@@ -47,12 +54,14 @@
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import DropRates from '~/components/molecules/DropRates.vue'
   import FlippingCards from '~/components/molecules/FlippingCards.vue'
+  import CardModal from '~/components/molecules/CardModal.vue'
 @Component({
   components: {
     Box,
     DropRates,
     FlippingCards,
-    LoadingSpinner
+    LoadingSpinner,
+    CardModal
   }
 })
   export default class Open extends Vue {
@@ -60,17 +69,18 @@
     private isOpening = false
     private isConfirming = false
     private cardIds = []
-    @State ownTendiesBoxes
+    private cardDetailsId = null
     @State chainId
+    @State ownTendiesBoxes
+    @State boxMaster
     @Action getInventoryOfUser
-    @Action getAssetCount
 
     get selectedId () {
       return Number(this.$route.query.id)
     }
 
-    get allBoxes() {
-      return ALL_BOXES
+    get allBoxesArray() {
+      return Object.keys(this.boxMaster).map(boxId => Number(boxId))
     }
 
     get boxInfo() {
@@ -82,7 +92,12 @@
     }
 
     get ownsTendiesBox() {
-      return this.ownTendiesBoxes[this.selectedId]
+      return !!this.ownTendiesBoxes[this.selectedId]
+    }
+
+    hasBox(boxId) {
+      const box = this.ownTendiesBoxes[boxId]
+      return !!box.count
     }
 
     sendToOpenSea() {
@@ -117,9 +132,16 @@
       this.isClosed = false
       this.cardIds = receipt.events.TransferBatch.returnValues.ids
       setTimeout(async () => {
-        await this.getInventoryOfUser({ fetchBoxes: false, fetchCards: true })
-        await this.getAssetCount()
+        await this.getInventoryOfUser({ fetchBoxes: true, fetchCards: true })
       }, 2000) 
+    }
+
+    openCardModal(cardId) {
+      this.cardDetailsId = cardId
+    }
+
+    closeCardModal() {
+      this.cardDetailsId = null
     }
   }
 </script>

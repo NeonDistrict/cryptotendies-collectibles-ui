@@ -2,9 +2,8 @@ import { BLOCKADE_API } from '~/assets/data/constants.js'
 import { TENDIES_BOX } from '~/assets/data/ethereum/contractsList.json'
 
 export default class BlockadeService {
-  constructor (axios, locale, _isDev) {
+  constructor (axios, _isDev) {
     this.axios = axios
-    this.locale = locale
   }
 
   baseUrl (networkId) {

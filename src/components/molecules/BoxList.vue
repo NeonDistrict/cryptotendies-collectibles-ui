@@ -2,15 +2,15 @@
 .boxList
   .boxList__wrapper
     .boxList__pack(
-      v-for="(box, index) in allBoxes" 
+      v-for="(boxId, index) in allBoxesArray" 
       :key="index"
-      :class="{inactive: !ownedCopies(box)}"
+      :class="{inactive: !ownedCopies(boxId)}"
     )
       box(
-        :boxInfo="box"
+        :boxId="Number(boxId)"
       )
       .boxList__buttons
-        button(@click="sendToOpen(box)" :disable="!ownedCopies(box)") Details
+        button(@click="sendToOpen(boxId)" :disable="!ownedCopies(boxId)") Details
 </template>
 
 <script lang="ts">
@@ -24,17 +24,24 @@
 })
   export default class BoxList extends Vue {
     @State ownTendiesBoxes
+    @State boxMaster
 
-    get allBoxes() {
-      return ALL_BOXES
+    get allBoxesArray() {
+      return Object.keys(this.boxMaster).map(boxId => Number(boxId))
     }
 
-    ownedCopies(boxInfo) {
-      return this.ownTendiesBoxes[boxInfo.id].count
+    getBoxInfo(boxId) {
+      return this.ownTendiesBoxes[boxId]
     }
 
-    sendToOpen(boxInfo) {
-      if (!this.ownedCopies(boxInfo)) return
+    ownedCopies(boxId) {
+      const boxInfo = this.getBoxInfo(boxId)
+      return boxInfo.count || 0
+    }
+
+    sendToOpen(boxId) {
+      const boxInfo = this.getBoxInfo(boxId)
+      if (!this.ownedCopies(boxId)) return
       this.$router.push({ path: 'open', query: {id: boxInfo.id}})
     }
   }

@@ -3,13 +3,10 @@
   .view-card__wrapper
     card(
       :isLarge="true"
-      :cardInfo="cardInfo"
+      :cardId="cardId"
     )
     .view-card__content
       .view-card__content__headline {{ cardInfo.name }}
-      //- drop-rates(
-      //-   :dropInfo="dropInfo"
-      //- )
       .view-card__content__text {{ cardInfo.description }}
       card-meta-data(
         :cardInfo="cardInfo"
@@ -34,21 +31,14 @@
 })
   export default class ViewCard extends Vue {
     @State ownTendiesCards
-    @State cardUri
-    private cardInfo = {} as CardInfo
+    @State cardMaster
 
-    async mounted() {
-      let cardInfo = this.ownTendiesCards[Number(this.cardId)] 
-      if (!cardInfo) {
-        cardInfo = await this.$blockadeService.getCardInfo(this.cardUri, this.cardId)
-        cardInfo.rarity = this.getRarityIdByTrait(cardInfo.attributes)
-        cardInfo.id = this.cardId
-      }
-      this.cardInfo = cardInfo
+    get cardInfo() {
+      return this.cardMaster[this.cardId]
     }
 
     get cardId() {
-      return this.$route.params.cardId
+      return Number(this.$route.params.cardId)
     }
 
     linkToOpenSea() {
@@ -57,18 +47,6 @@
 
     linkToTwitter() {
       window.alert('todo: Twitter Share Link')
-    }
-
-    getRarityIdByTrait(attributes) {
-      const rarity = attributes.find(trait => trait.traitType === 'Rarity')
-      if (!rarity) return 1
-      switch (rarity.value.toLowerCase()) {
-        case 'common': return 1
-        case 'uncommon': return 2
-        case 'rare': return 3
-        case 'epic': return 4
-        case 'legendary': return 5
-      }
     }
   }
 </script>

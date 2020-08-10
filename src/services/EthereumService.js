@@ -4,7 +4,6 @@ import Web3Modal from "web3modal"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import TendiesBoxAbi from '~/assets/data/ethereum/TendiesBox.abi.json'
 import TendiesCardAbi from '~/assets/data/ethereum/TendiesCard.abi.json'
-import contractsList from '~/assets/data/ethereum/contractsList.json'
 import { BLOCKNATIVE, INFURA_ID } from '~/assets/data/non_secret_keys.js'
 
 const providerOptions = {
@@ -74,6 +73,10 @@ export default class EthereumService {
     return web3Modal.cachedProvider
   }
 
+  get contractAddresses() {
+    return this.store.state.contractAddresses
+  }
+
   async walletUnlocked () {
     if (!this.hasWallet) {
       throw new Error('[Error] There is no Ethereum wallet.')
@@ -123,12 +126,12 @@ export default class EthereumService {
   }
 
   getTendiesBoxContract() {
-    const address = contractsList.TENDIES_BOX[this.store.state.networkId]
+    const address = this.contractAddresses.tENDIESBOX[this.store.state.networkId]
     return new this.web3.eth.Contract(TendiesBoxAbi, address)
   }
 
   getTendiesCardContract() {
-    const address = contractsList.TENDIES_CARD[this.store.state.networkId]
+    const address = this.contractAddresses.tENDIESCARD[this.store.state.networkId]
     return new this.web3.eth.Contract(TendiesCardAbi, address)
   }
 
@@ -220,12 +223,6 @@ export default class EthereumService {
   async getBalanceOfCard(userAddress, tendiesCardId) {
     const contract = await this.getTendiesCardContract()
     return contract.methods.balanceOf(userAddress, tendiesCardId).call()
-  }
-
-  async getCardUri() {
-    const contract = await this.getTendiesCardContract()
-    const uri = await contract.methods.uri(1).call()
-    return uri.replace('{id}', '')
   }
 
   async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {

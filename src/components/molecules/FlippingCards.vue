@@ -1,21 +1,20 @@
 <template lang="pug">
 .flipping
-  .flipping__load(v-if="isFetching")
-    loading-spinner
-    span Serving Fresh Cards... 
-    span Just a few more seconds.
-  .flipping__wrapper(v-else)
+  .flipping__wrapper
     .flipping__scene(
-      v-for="(card, index) in cardInfos" 
+      v-for="(cardId, index) in cardIds" 
       @click="flipCard(index)"
     )
       .flipping__card(:class="{'flipping__card--flipped': isFlipped(index)}")
         card-back.flipping__card__face.flipping__card__face--front(
-          :class="`flipping__card--${rarityStr(card)}`"
+          :class="`flipping__card--${rarityStr(getCardInfo(cardId))}`"
         )
-        card.flipping__card__face.flipping__card__face--back(
-          :cardInfo="card"
+        .flipping__card__face.flipping__card__face--back(
+          @click="$emit('open-card-modal', cardId)"
         )
+          card(
+            :cardId="cardId"
+          )
 </template>
 
 <script lang="ts">
@@ -34,25 +33,14 @@
   export default class FlippingCards extends Vue {
     @Prop() cardIds!: Array<Number>
     @State ownTendiesCards
-    @State cardUri
+    @State cardMaster
+
     private flippedCards = []
     private cardInfos = []
     private isFetching = true
 
-    async beforeMount() {
-      const cardInfos = await this.getCardInfos()
-      console.log(cardInfos)
-      this.cardInfos = cardInfos
-      this.isFetching = false
-    }
-
-    async getCardInfos() {
-      return await Promise.all(this.cardIds.map(async (cardId) => {
-        const cardInfo = await this.$blockadeService.getCardInfo(this.cardUri, cardId)
-        cardInfo.rarity = this.getRarityIdByTrait(cardInfo.attributes)
-        cardInfo.id = cardId
-        return cardInfo
-      }))
+    getCardInfo(cardId) {
+      return this.cardMaster[cardId]
     }
 
     rarityStr(cardInfo) {
@@ -155,29 +143,32 @@
       }
     }
 
-    &--common {
-      &:hover {
-        box-shadow: 0 0 16px rgba($color-pictonblue, 0.4);
-      }
-    }
-    &--uncommon {
-      &:hover {
-        box-shadow: 0 0 16px rgba($color-mainDarkGreen, 0.4);
-      }
-    }
+    // &--common {
+    //   &:hover {
+    //     box-shadow: 0 0 16px rgba($color-pictonblue, 0.4);
+    //   }
+    // }
+    // &--uncommon {
+    //   &:hover {
+    //     box-shadow: 0 0 16px rgba($color-mainDarkGreen, 0.4);
+    //   }
+    // }
     &--rare {
       &:hover {
-        box-shadow: 0 0 16px rgba($color-kournikova, 0.4);
+        box-shadow: 0 0 8px rgba($color-kournikova, 0.4);
       }
     }
     &--epic {
       &:hover {
-        box-shadow: 0 0 16px rgba($color-sandyBrown, 0.4);
+        box-shadow: 0 0 20px rgba($color-sandyBrown, 0.4);
       }
     }
     &--legendary {
       &:hover {
-        box-shadow: 0 0 16px rgba($color-bittersweet, 0.4);
+        box-shadow: 0 0 30px rgba($color-bittersweet, 0.4);
+        animation: shake 0.75s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        transform: translate3d(0, 0, 0);
+        perspective: 1000px;
       }
     }
   }
@@ -192,6 +183,29 @@
   }
   100% {
     transform: rotateZ(0deg) rotateY(180deg);
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
   }
 }
 </style>

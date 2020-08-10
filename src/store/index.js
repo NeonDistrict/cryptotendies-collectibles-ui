@@ -11,10 +11,10 @@ export const state = () => ({
   inventoryLoaded: false,
   authStoppedAt: '',
   cardUri: '',
-  ownTendiesBoxes: {
-    1: {},
-    2: {}
-  },
+  contractAddresses: {},
+  boxMaster: {}, 
+  cardMaster: {},
+  ownTendiesBoxes: {},
   ownTendiesCards: {}
 })
 
@@ -55,6 +55,15 @@ export const mutations = {
   SET_CARD_URI(state, flag) {
     state.cardUri = flag
   },
+  SET_CONTRACT_ADDRESSES(state, contractAddresses) {
+    state.contractAddresses = contractAddresses
+  },
+  SET_CARD_MASTER(state, cardMaster) {
+    state.cardMaster = cardMaster
+  },
+  SET_BOX_MASTER(state, boxMaster) {
+    state.boxMaster = boxMaster
+  }
 }
 
 
@@ -88,7 +97,9 @@ export const actions = {
     await commit('FINISH_INIT', false)
     try {
       await dispatch('setWeb3')
+      await dispatch('getContractAddresses')
       await dispatch('getCardUri')
+      await dispatch('getMasterData')
       await dispatch('getInventoryOfUser', { fetchBoxes: true, fetchCards: true })
     } catch (e) {
       await commit('SET_NEXT_AUTH_STEP', NEXT_AUTH_STEPS[3])
@@ -108,61 +119,54 @@ export const actions = {
     }
   },
 
-  async getCardUri ({ commit, dispatch, state }, _ctx ) {
-    const uri = await this.$ethereumService.getCardUri()
+  async getCardUri ({ commit }, _ctx ) {
+    const uri = await this.$tendiesService.getCardUri()
     await commit('SET_CARD_URI', uri)
   },
 
-  async getInventoryOfUser ({ commit, dispatch, state }, { fetchBoxes = true, fetchCards = true }) {
+  async getContractAddresses ({ commit }, _ctx ) {
+    const contractAddresses = await this.$tendiesService.getContractAddresses()
+    await commit('SET_CONTRACT_ADDRESSES', contractAddresses)
+  },
+
+  async getMasterData ({ commit }, _ctx) {
+    const cardMasterArray = await this.$tendiesService.getCardMaster()
+    const boxMasterArray = await this.$tendiesService.getBoxMaster()
+    const cardMaster = {}
+    cardMasterArray.forEach(card => {
+      cardMaster[card.id] = card
+    })
+    const boxMaster = {}
+    boxMasterArray.forEach(box => {
+      boxMaster[box.id] = box
+    })
+    await commit('SET_CARD_MASTER', cardMaster)
+    await commit('SET_BOX_MASTER', boxMaster)
+  },
+
+  async getInventoryOfUser ({ commit, state }, { fetchBoxes = true, fetchCards = true }) {
     try {
-      const { networkId, ownAddress, ownTendiesBoxes } = state
-      const boxMap = this.$util.clone(ownTendiesBoxes)
+      const { networkId, ownAddress } = state
+      const { boxes, cards } = await this.$tendiesService.getAllOwnedAssets(networkId, ownAddress)
+      const boxesMap = {}
       const cardsMap = {}
-      // 1. Get list of owned cards and boxes from OpenSea
-      // create mapping
-      // set mappings to state (to show what is owned)
-      if (fetchBoxes) {
-        const ownedBoxes = await this.$openSeaService.getOwnedBoxes(networkId, ownAddress)
-        if (ownedBoxes) {
-          ownedBoxes.forEach(boxInfo => {
-            boxMap[boxInfo.id] = boxInfo
-          })
+      boxes.forEach(box => {
+        boxesMap[box.id] = {
+          id: Number(box.id),
+          count: Number(box.amount)
         }
-        await commit('SET_OWN_TENDIES_BOXES', boxMap)
-      }
-      if (fetchCards) {
-        const ownedCards = await this.$openSeaService.getOwnedCards(networkId, ownAddress)
-        if (ownedCards) {
-          console.log('cards: ', ownedCards)
-          ownedCards.forEach(cardInfo => {
-            cardsMap[cardInfo.id] = cardInfo
-          })
+      })
+      cards.forEach(card => {
+        cardsMap[card.id] = {
+          id: Number(card.id),
+          count: Number(card.amount)
         }
-        await commit('SET_OWN_TENDIES_CARDS', cardsMap)
-        await commit('SET_INVENTORY_LOADED', true)
-      }
+      })
+      await commit('SET_OWN_TENDIES_BOXES', boxesMap)
+      await commit('SET_OWN_TENDIES_CARDS', cardsMap)
+      await commit('SET_INVENTORY_LOADED', true)
     } catch (e) {
       console.error(e)
     }
-  },
-
-  async getAssetCount ({ commit, state }, _payload) {
-    if (state.isFetchingAssetCount) return
-    await commit('SET_IS_FETCHING_ASSET_COUNT', true)
-    const boxMap = this.$util.clone(state.ownTendiesBoxes)
-    const cardsMap = this.$util.clone(state.ownTendiesCards)
-    for (let key in boxMap) {
-      const boxCount = await this.$ethereumService.getBalanceOfBox(state.ownAddress, String(key))
-      boxMap[key].count = Number(boxCount)
-    }
-    for (let key in cardsMap) {
-      console.log('key: ', key)
-      const cardCount = await this.$ethereumService.getBalanceOfCard(state.ownAddress, String(key))
-      console.log('count: ', cardCount)
-      cardsMap[key].count = Number(cardCount)
-    }
-    await commit('SET_OWN_TENDIES_BOXES', boxMap)
-    await commit('SET_OWN_TENDIES_CARDS', cardsMap)
-    await commit('SET_IS_FETCHING_ASSET_COUNT', false)
   }
 }

@@ -8,19 +8,24 @@
   .drop-rates__header Owner
   .drop-rates__row
     .drop-rates__wrapper {{ownerShortened}}
-    .drop-rates__wrapper Owned: {{ cardInfo.count }}x
+    .drop-rates__wrapper Owned: {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { RARITIES } from '~/assets/data/constants'
   import { CardInfo } from '~/types'
 @Component({})
   export default class CardMetadata extends Vue {
     @Prop() cardInfo!: CardInfo
+    @State ownTendiesCards
     
     get rarities () {
       return RARITIES
+    }
+
+    get ownCardInfo() {
+      return this.ownTendiesCards[this.cardInfo.id] || {}
     }
 
     get rarityStr() {

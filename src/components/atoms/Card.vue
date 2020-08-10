@@ -1,10 +1,8 @@
 <template lang="pug">
-nuxt-link.card(
-  :to="{ name: 'cards-cardId', params: { cardId: cardInfo.id } }"
+.card(
   :class="{'card--large': isLarge}"
+  @click="openCardDetails"
 )
-  //- img(:src="require('~/assets/images/tend.png')")
-  //- .card__rarity(:class="`card__rarity--${rarityStr}`") {{ rarityLetter }}
   .card__wrapper(
     :class="`card__wrapper--${rarityStr}`"
   )
@@ -12,18 +10,29 @@ nuxt-link.card(
     img.card__wrapper__img(:src="cardInfo.image")
   .card__owned(v-if="showOwned") 
     fa-icon(v-if="isFetchingAssetCount" :icon="['fas', 'spinner']" spin)
-    span(v-else) {{cardInfo.count ? `${cardInfo.count}x` : '-'}}
+    span(v-else) {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
 </template>
 
 <script lang="ts">
   import { Component, Prop, Vue, State} from 'nuxt-property-decorator'
-  import { CardInfo } from '~/types'
+  import { CardInfo, OwnCardInfo } from '~/types'
 @Component({})
   export default class Card extends Vue {
-    @Prop() cardInfo!: CardInfo
+    @Prop() cardId!: number
     @Prop({default: false}) isLarge!: boolean
+    @Prop({default: false}) clickable!: boolean
     @Prop({default: false}) showOwned!: boolean
     @State isFetchingAssetCount
+    @State cardMaster
+    @State ownTendiesCards
+
+    get cardInfo() {
+      return this.cardMaster[this.cardId] as CardInfo
+    }
+
+    get ownCardInfo() {
+      return this.ownTendiesCards[this.cardId] as OwnCardInfo || {}
+    }
 
     get rarityStr() {
       switch(this.cardInfo.rarity) {
@@ -35,13 +44,9 @@ nuxt-link.card(
       }
     }
 
-    get rarityLetter() {
-      switch(this.cardInfo.rarity) {
-        case 1: return 'C'
-        case 2: return 'UC'
-        case 3: return 'R'
-        case 4: return 'E'
-        case 5: return 'L'
+    openCardDetails() {
+      if (this.clickable) { 
+        return this.$router.push({ name: 'cards-cardId', params: { cardId: String(this.cardId) } })
       }
     }
   }

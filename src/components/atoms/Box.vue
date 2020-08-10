@@ -18,13 +18,18 @@
   import { BoxInfo } from '~/types'
 @Component({})
   export default class Box extends Vue {
-    @Prop() boxInfo!: BoxInfo
+    @Prop() boxId!: number
     @Prop({default: false}) isLarge?: boolean
     @State ownTendiesBoxes
     @State isFetchingAssetCount
+    @State boxMaster
+
+    get boxInfo() {
+      return this.boxMaster[this.boxId]
+    }
 
     get myBoxInfo() {
-      return this.ownTendiesBoxes[this.boxInfo.id]
+      return this.ownTendiesBoxes[this.boxId] || {}
     }
   }
 </script>
