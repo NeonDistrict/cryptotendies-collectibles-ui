@@ -48,7 +48,7 @@
     }
 
     get ownedCopies() {
-      return this.ownTendiesBoxes[this.boxInfo.id].count
+      return (this.ownTendiesBoxes[this.boxInfo.id] || {}).count
     }
 
   }

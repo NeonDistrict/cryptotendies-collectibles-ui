@@ -138,13 +138,13 @@
 
   &__owned {
     z-index: 99;
-    margin: -1rem 0 0 auto;
-    background-color: $color-woodsmoke;
-    border-radius: 0.5rem;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.8rem;
+    margin: -1rem -0.5rem 0 auto;
+    background-color: $color-koromiko;
+    color: $color-shark-dark;
+    border-radius: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    color: rgba(white, 0.8);
 
     svg {
       font-size: 0.8rem;

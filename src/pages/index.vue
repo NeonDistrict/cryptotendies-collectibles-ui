@@ -11,8 +11,7 @@
       @click="currentSelection = item"
     ) {{ item }}
   .landing__packs(v-if="currentSelection === menu[0]")
-    cards-list(v-if="hasCards")
-    span(v-else) 🐔 No Cards Found 🐔
+    cards-list
   .landing__packs(v-if="currentSelection === menu[1]")
     box-list
 </template>
@@ -30,14 +29,9 @@
 })
   export default class extends Vue {
     private currentSelection = ''
-    @State ownTendiesCards
 
     beforeMount() {
       this.currentSelection = this.menu[0]
-    }
-
-    get hasCards() {
-      return Object.keys(this.ownTendiesCards).length > 0
     }
 
     get menu () {
@@ -90,12 +84,6 @@
     margin: 1rem 0 2rem;
     @include breakpoint(sm) {
       margin: 1rem 0 3rem;
-    }
-    span { 
-      margin: 2rem auto;
-      display: block;
-      text-align: center;
-      opacity: 0.8;
     }
   }
   &__menu {

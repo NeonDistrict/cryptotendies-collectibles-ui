@@ -1,6 +1,7 @@
 <template lang="pug">
 .cardsList
-  .cardsList__wrapper
+  .cardsList__empty(v-if="!hasCards") 🐔 No Cards Found 🐔
+  .cardsList__wrapper(v-else)
     card(
       v-for="cardId in allMyCardIds" 
       :key="cardId"
@@ -25,11 +26,21 @@
     get allMyCardIds() {
       return Object.keys(this.ownTendiesCards) as Array<string>
     }
+
+    get hasCards() {
+      return this.allMyCardIds.length > 0
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 .cardsList {
+  &__empty {
+    margin: 2rem auto;
+    display: block;
+    text-align: center;
+    opacity: 0.8;
+  }
   &__wrapper {
     display: grid;
     grid-gap: 2rem 1rem;

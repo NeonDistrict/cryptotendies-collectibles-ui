@@ -13,25 +13,36 @@
       )
   .view-card__main
     .view-card__main__btns
-      button(@click="linkToOpenSea") Sell Card
+      button(@click="linkToOpenSea") Trade Card
+      button(@click="openSendModal") Send Card
       button(@click="linkToTwitter") Shill on Twitter
+  
+  send-asset-modal(
+    v-if="showSendModal"
+    :assetId="cardId"
+    :isCard="true"
+    @modal-close="closeSendModal"
+  )
 </template>
 
 <script lang="ts">
   import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { ALL_CARDS } from '~/assets/data/db/mocked'
+  import { CardInfo } from '~/types'
   import Card from '~/components/atoms/Card.vue'
   import CardMetaData from '~/components/molecules/CardMetaData.vue'
-  import { CardInfo } from '~/types'
+  import SendAssetModal from '~/components/molecules/SendAssetModal.vue'
 @Component({
   components: {
     Card,
-    CardMetaData
+    CardMetaData,
+    SendAssetModal
   }
 })
   export default class ViewCard extends Vue {
     @State ownTendiesCards
     @State cardMaster
+    private showSendModal = false
 
     get cardInfo() {
       return this.cardMaster[this.cardId]
@@ -47,6 +58,14 @@
 
     linkToTwitter() {
       window.alert('todo: Twitter Share Link')
+    }
+
+    openSendModal() {
+      this.showSendModal = true
+    }
+
+    closeSendModal() {
+      this.showSendModal = false
     }
   }
 </script>
@@ -92,21 +111,25 @@
 
     &__btns {
       margin: 2rem 0;
-      @extend %row;
+      @extend %col;
+      @include breakpoint(sm) {
+        flex-direction: row;
+      }
       button + button {
-        margin-left: 1.5rem;
+        margin-top: 1rem;
         @include breakpoint(sm) {
+          margin-top: 0;
           margin-left: 2rem;
         }
       }
       button { 
-        @extend %btn-primary;
+        @extend %btn-secondary;
         width: 100%;
         @include breakpoint(sm) {
           width: 12rem;
         }
-        &:first-of-type {
-          @extend %btn-secondary;
+        &:last-of-type {
+          @extend %btn-primary;
         }
       }
     }

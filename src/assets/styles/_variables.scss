@@ -164,8 +164,7 @@ $color-koromiko: map-get($colors, koromiko);
 
   &:disabled {
     opacity: 0.8;
-    background-color: darken($color-koromiko, 5);
-    color: darken($color-shark, 5);
+    background-color: rgba($color-koromiko, 0.5);
     cursor: default;
   }
 }

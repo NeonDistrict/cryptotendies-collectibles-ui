@@ -1,5 +1,6 @@
 <template lang="pug">
 .boxList
+  //- .boxList__empty(v-if="!hasBoxes") 🍗 No Boxes Found 🍗
   .boxList__wrapper
     .boxList__pack(
       v-for="(boxId, index) in allBoxesArray" 
@@ -35,12 +36,12 @@
     }
 
     ownedCopies(boxId) {
-      const boxInfo = this.getBoxInfo(boxId)
+      const boxInfo = this.getBoxInfo(boxId) || {}
       return boxInfo.count || 0
     }
 
     sendToOpen(boxId) {
-      const boxInfo = this.getBoxInfo(boxId)
+      const boxInfo = this.getBoxInfo(boxId) || {}
       if (!this.ownedCopies(boxId)) return
       this.$router.push({ path: 'open', query: {id: boxInfo.id}})
     }
@@ -49,6 +50,12 @@
 
 <style lang="scss" scoped>
 .boxList {
+  &__empty {
+    margin: 2rem auto;
+    display: block;
+    text-align: center;
+    opacity: 0.8;
+  }
   &__wrapper {
     display: grid;
     grid-gap: 1rem;

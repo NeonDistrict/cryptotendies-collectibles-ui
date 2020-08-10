@@ -45,7 +45,7 @@ export default class EthereumService {
     if (window.ethereum && window.ethereum.on) {
       try {
         window.ethereum.on('accountsChanged', (accounts) => {
-          // handle account change
+          location.reload()
         })
       } catch (e) {
         console.error(`error setting listener: ${e}`)
@@ -223,6 +223,54 @@ export default class EthereumService {
   async getBalanceOfCard(userAddress, tendiesCardId) {
     const contract = await this.getTendiesCardContract()
     return contract.methods.balanceOf(userAddress, tendiesCardId).call()
+  }
+
+  async sendCard(from, to, tokenId, amount, networkId, callbackAfterSend = () => {}, callbackAfterSuccess = () => {}) {
+    const notify = Notify({
+      dappId: BLOCKNATIVE, // [String] The API key created by step one above
+      networkId // [Integer] The Ethereum network ID your Dapp uses.
+    })
+
+    notify.config({
+      mobilePosition: 'bottom'
+    })
+
+    const contract = await this.getTendiesCardContract()
+    return contract.methods
+      .safeTransferFrom(from, to, tokenId, amount, '0x0')
+      .send({ from })
+      .on('transactionHash', function (hash) {
+        notify.hash(hash)
+        callbackAfterSend()
+      })
+      .on('receipt', function (receipt) {
+        console.info(receipt)
+        callbackAfterSuccess && callbackAfterSuccess(receipt)
+      })
+  }
+
+  async sendBox(from, to, tokenId, amount, networkId, callbackAfterSend = () => {}, callbackAfterSuccess = () => {}) {
+    const notify = Notify({
+      dappId: BLOCKNATIVE, // [String] The API key created by step one above
+      networkId // [Integer] The Ethereum network ID your Dapp uses.
+    })
+
+    notify.config({
+      mobilePosition: 'bottom'
+    })
+
+    const contract = await this.getTendiesBoxContract()
+    return contract.methods
+      .safeTransferFrom(from, to, tokenId, amount, '0x0')
+      .send({ from })
+      .on('transactionHash', function (hash) {
+        notify.hash(hash)
+        callbackAfterSend()
+      })
+      .on('receipt', function (receipt) {
+        console.info(receipt)
+        callbackAfterSuccess && callbackAfterSuccess(receipt)
+      })
   }
 
   async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {

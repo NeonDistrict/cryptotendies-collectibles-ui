@@ -26,6 +26,7 @@
       span This could take a while, please don't close this tab.
     .open__main__btns(v-else-if="isClosed")
       button(@click="sendToOpenSea") Sell Box
+      button(@click="openSendModal") Send Box
       button(@click="openBox" :disabled="isOpening") 
         fa-icon(v-if="isOpening" :icon="['fas', 'spinner']" spin)
         span Open Box
@@ -44,6 +45,13 @@
     :cardId="cardDetailsId"
     @modal-close="closeCardModal"
   )
+
+  send-asset-modal(
+    v-if="showSendModal"
+    :assetId="selectedId"
+    :isBox="true"
+    @modal-close="closeSendModal"
+  )
 </template>
 
 <script lang="ts">
@@ -55,13 +63,15 @@
   import DropRates from '~/components/molecules/DropRates.vue'
   import FlippingCards from '~/components/molecules/FlippingCards.vue'
   import CardModal from '~/components/molecules/CardModal.vue'
+  import SendAssetModal from '~/components/molecules/SendAssetModal.vue'
 @Component({
   components: {
     Box,
     DropRates,
     FlippingCards,
     LoadingSpinner,
-    CardModal
+    CardModal,
+    SendAssetModal
   }
 })
   export default class Open extends Vue {
@@ -70,6 +80,8 @@
     private isConfirming = false
     private cardIds = []
     private cardDetailsId = null
+    private showSendModal = false
+
     @State chainId
     @State ownTendiesBoxes
     @State boxMaster
@@ -96,8 +108,8 @@
     }
 
     hasBox(boxId) {
-      const box = this.ownTendiesBoxes[boxId]
-      return !!box.count
+      const box = this.ownTendiesBoxes[boxId] || {}
+      return !!box.count || 0
     }
 
     sendToOpenSea() {
@@ -122,7 +134,7 @@
     }
 
     selectBox(boxId) {
-      if (this.ownTendiesBoxes[boxId].count) {
+      if ((this.ownTendiesBoxes[boxId] || {}).count) {
         this.$router.push({ path: 'open', query: {id: boxId}})
       }
     }
@@ -142,6 +154,14 @@
 
     closeCardModal() {
       this.cardDetailsId = null
+    }
+
+    openSendModal() {
+      this.showSendModal = true
+    }
+
+    closeSendModal() {
+      this.showSendModal = false
     }
   }
 </script>
@@ -212,15 +232,23 @@
 
     &__btns {
       margin: 2rem 0;
-      @extend %row;
+      @extend %col;
+      @include breakpoint(sm) {
+        margin: 4rem 0 2rem;
+        flex-direction: row;
+      }
       button + button {
-        margin-left: 2rem;
+        margin-top: 1rem;
+        @include breakpoint(sm) {
+          margin-top: 0;
+          margin-left: 2rem;
+        }
       }
       button { 
-        @extend %btn-primary;
+        @extend %btn-secondary;
         width: 100%;
-        &:first-of-type {
-          @extend %btn-secondary;
+        &:last-of-type {
+          @extend %btn-primary;
         }
         svg { 
           margin-right: 0.5rem;
