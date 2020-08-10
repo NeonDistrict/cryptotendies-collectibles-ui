@@ -126,12 +126,12 @@ export default class EthereumService {
   }
 
   getTendiesBoxContract() {
-    const address = this.contractAddresses.tENDIESBOX[this.store.state.networkId]
+    const address = this.contractAddresses.tendiesBox[this.store.state.networkId]
     return new this.web3.eth.Contract(TendiesBoxAbi, address)
   }
 
   getTendiesCardContract() {
-    const address = this.contractAddresses.tENDIESCARD[this.store.state.networkId]
+    const address = this.contractAddresses.tendiesCard[this.store.state.networkId]
     return new this.web3.eth.Contract(TendiesCardAbi, address)
   }
 

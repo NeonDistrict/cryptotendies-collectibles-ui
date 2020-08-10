@@ -35,7 +35,12 @@ export default class TendiesService {
 
   async getCardUri() {
     const contract = await this.getTendiesCardContract()
-    const uri = await contract.methods.uri(1).call()
+    let uri = ''
+    try {
+      uri = await contract.methods.uri(1).call()
+    } catch(e) {
+      console.error(e)
+    }
     return uri.replace('{id}', '')
   }
 
