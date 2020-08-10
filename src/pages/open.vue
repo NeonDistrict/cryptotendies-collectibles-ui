@@ -38,7 +38,7 @@
       )
       button(@click="openNext") Open Next Box
   .open__main(v-else) 
-    .open__main--empty 🐔 No owned Tendies Boxes found.
+    .open__main--empty 🐔 No owned Tendies Boxes found. 🐔
 
   card-modal(
     v-if="cardDetailsId"
