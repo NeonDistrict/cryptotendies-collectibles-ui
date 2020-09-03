@@ -11,8 +11,10 @@
       @click="currentSelection = item"
     ) {{ item }}
   .landing__packs(v-if="currentSelection === menu[0]")
-    cards-list
+    earn-packs
   .landing__packs(v-if="currentSelection === menu[1]")
+    cards-list
+  .landing__packs(v-if="currentSelection === menu[2]")
     box-list
 </template>
 
@@ -20,11 +22,13 @@
   import { Component, Vue, State } from 'nuxt-property-decorator'
   import BoxList from '~/components/molecules/BoxList.vue'
   import CardsList from '~/components/molecules/CardsList.vue'
+  import EarnPacks from '~/components/molecules/EarnPacks.vue'
 
 @Component({
   components: {
     BoxList,
-    CardsList
+    CardsList,
+    EarnPacks
   }
 })
   export default class extends Vue {
@@ -35,7 +39,7 @@
     }
 
     get menu () {
-      return ['Your Collection', 'Your Boxes']
+      return ['Earn Packs', 'Your Collection', 'Your Boxes']
     }
 
     scrollToTop () {

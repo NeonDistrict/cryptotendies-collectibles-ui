@@ -41,8 +41,21 @@ modal.card-modal(@modal-close="$emit('modal-close')")
       return this.cardMaster[this.cardId]
     }
 
+    get twitterText() {
+      return 'Get some fresh Tendies Memes:'
+    }
+
+    get url() {
+      return 'https://opensea.io/'
+    }
+
+    get hashTags() {
+      return ['$TEND']
+    }
+
     openTwitter() {
-      window.alert('Todo: Implement Twitter Shill')
+      console.log(this.cardInfo)
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.url}&hashtags=${this.hashTags}`, '_blank')
     }
   }
 </script>

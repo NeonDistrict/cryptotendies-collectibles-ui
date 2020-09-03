@@ -13,8 +13,13 @@
       )
   .view-card__main
     .view-card__main__btns
-      button(@click="linkToOpenSea") Trade Card
-      button(@click="openSendModal") Send Card
+      button(
+        @click="linkToOpenSea"
+      ) Trade Card
+      button(
+        v-if="isOwned"
+        @click="openSendModal"
+      ) Send Card
       button(@click="linkToTwitter") Shill on Twitter
   
   send-asset-modal(
@@ -52,12 +57,29 @@
       return Number(this.$route.params.cardId)
     }
 
-    linkToOpenSea() {
-      window.open(this.cardInfo.link, '_blank')
+    get twitterText() {
+      return 'Get some fresh Tendies Memes:'
+    }
+
+    get url() {
+      return 'https://opensea.io/'
+    }
+
+    get hashTags() {
+      return ['tendies, NFT']
+    }
+
+    get isOwned() {
+      return !!this.ownTendiesCards[this.cardId]
     }
 
     linkToTwitter() {
-      window.alert('todo: Twitter Share Link')
+      console.log(this.cardInfo)
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.url}&hashtags=${this.hashTags}`, '_blank')
+    }
+
+    linkToOpenSea() {
+      window.open(this.cardInfo.link, '_blank')
     }
 
     openSendModal() {
