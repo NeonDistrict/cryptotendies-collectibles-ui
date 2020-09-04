@@ -4,7 +4,10 @@ import Web3Modal from "web3modal"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import TendiesBoxAbi from '~/assets/data/ethereum/TendiesBox.abi.json'
 import TendiesCardAbi from '~/assets/data/ethereum/TendiesCard.abi.json'
+import TendiesWrapperAbi from '~/assets/data/ethereum/TendiesWrapper.abi.json'
+import TendTokenAbi from '~/assets/data/ethereum/TendToken.abi.json'
 import { BLOCKNATIVE, INFURA_ID } from '~/assets/data/non_secret_keys.js'
+import { TENDIES_TOKEN, TENDIES_WRAPPER } from '~/assets/data/ethereum/contractsList'
 
 const providerOptions = {
   // fortmatic: {
@@ -45,7 +48,7 @@ export default class EthereumService {
     if (window.ethereum && window.ethereum.on) {
       try {
         window.ethereum.on('accountsChanged', (accounts) => {
-          location.reload()
+          window.alert('You switched your ETH wallet. Please refresh the page.')
         })
       } catch (e) {
         console.error(`error setting listener: ${e}`)
@@ -135,6 +138,16 @@ export default class EthereumService {
     return new this.web3.eth.Contract(TendiesCardAbi, address)
   }
 
+  getTendiesWrapperContract() {
+    const address = TENDIES_WRAPPER[this.store.state.networkId]
+    return new this.web3.eth.Contract(TendiesWrapperAbi, address)
+  }
+
+  getTendToken() {
+    const address = TENDIES_TOKEN[this.store.state.networkId]
+    return new this.web3.eth.Contract(TendTokenAbi, address)
+  }
+
   getERC721Contract (address) {
     return new this.web3.eth.Contract(ERC721Abi, address)
   }
@@ -149,6 +162,13 @@ export default class EthereumService {
       gasPriceInGwei = this.web3.utils.toWei('5', 'gwei')
     }
     return gasPriceInGwei
+  }
+
+  async getGrillAmount () {
+    const contract = await this.getTendToken()
+    return contract.methods
+      .getGrillAmount()
+      .call()
   }
 
   getNetworkSlug (netId) {
@@ -306,6 +326,29 @@ export default class EthereumService {
     const gasPriceInGwei = await this.getGasPriceInGwei()
     return contract.methods
       .setApprovalForAll(converterAddress, true)
+      .send({
+        from: fromAddress,
+        gasPrice: gasPriceInGwei,
+        gasLimit: 300000
+      })
+      .on('transactionHash', function (hash) {
+        notify.hash(hash)
+        callbackAfterSend()
+      })
+      .on('receipt', function (receipt) {
+        console.info(receipt)
+      })
+  }
+
+  async grillPool (fromAddress, networkId, callbackAfterSend = () => {}) {
+    const notify = Notify({
+      dappId: BLOCKNATIVE, // [String] The API key created by step one above
+      networkId // [Integer] The Ethereum network ID your Dapp uses.
+    })
+    const contract = await this.getTendiesWrapperContract()
+    const gasPriceInGwei = await this.getGasPriceInGwei()
+    return contract.methods
+      .grillPool()
       .send({
         from: fromAddress,
         gasPrice: gasPriceInGwei,

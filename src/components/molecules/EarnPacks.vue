@@ -7,31 +7,46 @@
           :src="require('~/assets/images/gifs/nom.gif')"
         )
       .earn__title OM NOM NOM NOM
-      .earn__text Grill and get 5x Packs and 1% of TEND
+      .earn__text 
+        span(v-if="didFetch") {{ grillAmount }} 
+        fa-icon(v-else :icon="['fas', 'spinner']" spin)
+        span TEND on the Grill
+      .earn__text Grill to get 5 Packs and 1% of TEND
       button.earn__button(
-        @click="burn"
+        @click="grill"
       ) Grill TEND
-    .earn__card
-      .earn__emoji
-        img.earn__emoji__nom(
-          :src="require('~/assets/images/gifs/bucket.gif')"
-        )
-      .earn__title CLAIM TENDIES BUCKET
-      .earn__text Next Bucket claimable in 2days, 13hours, 2minutes
-      button.earn__button(
-        @click="burn"
-      ) Claim Bucket
   
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
 @Component({})
   export default class Earn extends Vue {
     @Prop() propName!: string
+    @State ownAddress
+    @State networkId
 
-    burn() {
-      window.alert('tbd')
+    private grillAmount = 0
+    private didFetch = false
+    private intervalId
+
+    async mounted() {
+      this.intervalId = setInterval(async () => this.getGrillAmount(), 30000)
+    }
+
+    beforeDestroy() {
+      clearInterval(this.intervalId)
+    }
+
+    async getGrillAmount() {
+      const grillValue = (await this.$ethereumService.getGrillAmount()) / 1e18
+      console.log(grillValue)
+      this.grillAmount = Math.floor(grillValue * 100) / 100
+      this.didFetch = true
+    }
+
+    grill() {
+      this.$ethereumService.grillPool(this.ownAddress, this.networkId)
     }
   }
 </script>
@@ -40,6 +55,7 @@
 .earn {
   &__wrapper {
     @extend %row;
+    margin-top: 2rem;
   }
   &__card + &__card {
     margin-left: 2rem;
@@ -71,6 +87,10 @@
     font-size: 0.9rem;
     opacity: 0.8;
     text-align: center; 
+
+    svg { 
+      margin-right: 0.5rem;
+    }
   }
   &__button {
     @extend %btn-primary;
