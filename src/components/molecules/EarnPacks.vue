@@ -7,11 +7,14 @@
           :src="require('~/assets/images/gifs/nom.gif')"
         )
       .earn__title OM NOM NOM NOM
-      .earn__text 
-        span(v-if="didFetch") {{ grillAmount }} 
+      .earn__text__tend
+        span(v-if="didFetch") 
+          span {{ grillAmount }} 
         fa-icon(v-else :icon="['fas', 'spinner']" spin)
-        span TEND on the Grill
-      .earn__text Grill to get 5 Packs and 1% of TEND
+      .earn__text 
+        span TEND on the Grill 
+        span (${{tendiesValue}})
+      .earn__grill Grill to get 5 Packs and 1% of TEND
       button.earn__button(
         @click="grill"
       ) Grill TEND
@@ -29,6 +32,7 @@
     private grillAmount = 0
     private didFetch = false
     private intervalId
+    private tendPrice = 0
 
     async mounted() {
       this.intervalId = setInterval(async () => this.getGrillAmount(), 30000)
@@ -38,7 +42,19 @@
       clearInterval(this.intervalId)
     }
 
+    get tendiesValue() {
+      return Math.round(this.tendPrice * this.grillAmount * 100) / 100
+    }
+
     async getGrillAmount() {
+      try {
+       const res =  await this.$axios.$get('https://api.coingecko.com/api/v3/simple/price?ids=tendies&vs_currencies=USD')
+       if (res.tendies) {
+         this.tendPrice = res.tendies.usd
+       }
+      } catch (e) {
+        console.error(e)
+      }
       const grillValue = (await this.$ethereumService.getGrillAmount()) / 1e18
       console.log(grillValue)
       this.grillAmount = Math.floor(grillValue * 100) / 100
@@ -83,18 +99,31 @@
     font-weight: bold;
   }
   &__text {
-    margin: 0.5rem 0;
     font-size: 0.9rem;
     opacity: 0.8;
     text-align: center; 
 
-    svg { 
-      margin-right: 0.5rem;
+    span {
+      &:last-of-type {
+        margin-left: 0.5rem;
+      } 
     }
+
+    &__tend {
+      margin: 1.25rem 0 0.5rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
+
+  &__grill {
+    color: $color-koromiko;
+    margin: 1rem 0 0.5rem;
   }
   &__button {
     @extend %btn-primary;
-    margin-top: 1rem;
+    width: 80%;
+    margin: 1rem 0 0.5rem;
   }
 }
 </style>
