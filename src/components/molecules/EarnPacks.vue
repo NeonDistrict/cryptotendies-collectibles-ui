@@ -11,8 +11,10 @@
         span(v-if="didFetch") 
           span {{ grillAmount }} 
         fa-icon(v-else :icon="['fas', 'spinner']" spin)
-      .earn__text TEND on the Grill (${{tendiesValue}})
-      .earn__text Grill to get 5 Packs and 1% of TEND
+      .earn__text 
+        span TEND on the Grill 
+        span (${{tendiesValue}})
+      .earn__grill Grill to get 5 Packs and 1% of TEND
       button.earn__button(
         @click="grill"
       ) Grill TEND
@@ -53,7 +55,6 @@
       } catch (e) {
         console.error(e)
       }
-      console.log(this.tendPrice)
       const grillValue = (await this.$ethereumService.getGrillAmount()) / 1e18
       console.log(grillValue)
       this.grillAmount = Math.floor(grillValue * 100) / 100
@@ -98,7 +99,6 @@
     font-weight: bold;
   }
   &__text {
-    margin: 0.5rem 0;
     font-size: 0.9rem;
     opacity: 0.8;
     text-align: center; 
@@ -115,9 +115,15 @@
       font-weight: bold;
     }
   }
+
+  &__grill {
+    color: $color-koromiko;
+    margin: 1rem 0 0.5rem;
+  }
   &__button {
     @extend %btn-primary;
-    margin-top: 1rem;
+    width: 80%;
+    margin: 1rem 0 0.5rem;
   }
 }
 </style>
