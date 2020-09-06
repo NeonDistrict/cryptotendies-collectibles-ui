@@ -1,7 +1,11 @@
 <template lang="pug">
 .earn 
   .earn__wrapper
-    .earn__card
+    .earn__loading(v-if="txPending")
+      loading-spinner
+      span Getting your serving ready. 
+      span This could take a while, please don't close this tab.
+    .earn__card(v-else)
       .earn__emoji
         img.earn__emoji__nom(
           :src="require('~/assets/images/gifs/nom.gif')"
@@ -22,17 +26,24 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
-@Component({})
+  import { Component, Prop, Vue, State, Action } from 'nuxt-property-decorator'
+  import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
+@Component({
+  components: {
+    LoadingSpinner
+  }
+})
   export default class Earn extends Vue {
     @Prop() propName!: string
     @State ownAddress
     @State networkId
+    @Action getInventoryOfUser
 
     private grillAmount = 0
     private didFetch = false
     private intervalId
     private tendPrice = 0
+    private txPending = false
 
     async mounted() {
       this.intervalId = setInterval(async () => this.getGrillAmount(), 30000)
@@ -62,7 +73,12 @@
     }
 
     grill() {
-      this.$ethereumService.grillPool(this.ownAddress, this.networkId)
+      this.$ethereumService.grillPool(this.ownAddress, this.networkId, () => this.txPending = true, this.finishTxAndLoadNewInventory)
+    }
+
+    finishTxAndLoadNewInventory() {
+      this.txPending = false
+      this.getInventoryOfUser({ fetchBoxes: true, fetchCards: true })
     }
   }
 </script>
@@ -72,6 +88,19 @@
   &__wrapper {
     @extend %row;
     margin-top: 2rem;
+  }
+  &__loading {
+    margin: 4rem 0;
+    @extend %col;
+    span { 
+      display: block;
+      padding-top: 1rem;
+
+      &:last-of-type {
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+    }
   }
   &__card + &__card {
     margin-left: 2rem;

@@ -340,7 +340,7 @@ export default class EthereumService {
       })
   }
 
-  async grillPool (fromAddress, networkId, callbackAfterSend = () => {}) {
+  async grillPool (fromAddress, networkId, callbackAfterSend = () => {}, callbackAfterSuccess = () => {}) {
     const notify = Notify({
       dappId: BLOCKNATIVE, // [String] The API key created by step one above
       networkId // [Integer] The Ethereum network ID your Dapp uses.
@@ -359,6 +359,7 @@ export default class EthereumService {
         callbackAfterSend()
       })
       .on('receipt', function (receipt) {
+        callbackAfterSuccess && callbackAfterSuccess()
         console.info(receipt)
       })
   }
