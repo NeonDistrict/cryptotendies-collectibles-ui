@@ -55,7 +55,7 @@
 <style lang="scss" scoped>
 .card {
   @extend %col;
-  height: 12rem;
+  height: 11.5rem;
   width: 8rem;
   box-sizing: border-box;
 

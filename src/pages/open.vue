@@ -113,7 +113,7 @@
     }
 
     sendToOpenSea() {
-      window.open(this.ownTendiesBoxes[this.selectedId].link, '_blank')
+      window.open(this.boxMaster[this.selectedId].link, '_blank')
     }
 
     openNext() {

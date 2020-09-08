@@ -4,8 +4,8 @@
   .drop-rates__row
     .drop-rates__wrapper Rarity: 
       span.drop-rates__wrapper__rarity(:class="rarityStr") {{rarityStr}}
-    .drop-rates__wrapper Supply: {{ cardInfo.supply || '??' }}
-    .drop-rates__wrapper Owned: {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
+    .drop-rates__wrapper Owned: 
+      span {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
 </template>
 
 <script lang="ts">
@@ -48,11 +48,6 @@
     display: grid;
     grid-gap: 0 1rem;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    @include breakpoint(sm) {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(1, 1fr);
-    }
   }
   &__wrapper {
     @extend %row;
@@ -66,6 +61,10 @@
 
     &__rarity {
       padding-left: 0.5rem;
+    }
+    span { 
+      display: inline-block;
+      margin-left: auto;
     }
   } 
 

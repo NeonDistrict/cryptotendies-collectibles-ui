@@ -67,7 +67,6 @@
         console.error(e)
       }
       const grillValue = (await this.$ethereumService.getGrillAmount()) / 1e18
-      console.log(grillValue)
       this.grillAmount = Math.floor(grillValue * 100) / 100
       this.didFetch = true
     }
@@ -76,9 +75,10 @@
       this.$ethereumService.grillPool(this.ownAddress, this.networkId, () => this.txPending = true, this.finishTxAndLoadNewInventory)
     }
 
-    finishTxAndLoadNewInventory() {
+    async finishTxAndLoadNewInventory() {
       this.txPending = false
-      this.getInventoryOfUser({ fetchBoxes: true, fetchCards: true })
+      await this.getInventoryOfUser({ fetchBoxes: true, fetchCards: true })
+      await this.getGrillAmount()
     }
   }
 </script>

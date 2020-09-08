@@ -105,13 +105,13 @@
     }
 
   &__scene {
-    height: 12rem;
+    height: 11.5rem;
     width: 8rem;
     box-sizing: border-box;
     perspective: 600px;
 
     @include breakpoint(sm) {
-      height: 18rem;
+      height: 17rem;
       width: 12rem;
     } 
   }

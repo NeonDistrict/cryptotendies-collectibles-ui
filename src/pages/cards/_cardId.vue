@@ -70,7 +70,7 @@
     }
 
     linkToTwitter() {
-      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${window.location.href}&hashtags=${this.hashTags}`, '_blank')
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.cardInfo.link}&hashtags=${this.hashTags}`, '_blank')
     }
 
     linkToOpenSea() {

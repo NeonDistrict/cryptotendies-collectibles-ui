@@ -45,16 +45,12 @@ modal.card-modal(@modal-close="$emit('modal-close')")
       return 'Look, mommy gave me this fresh tendies meme:'
     }
 
-    get url() {
-      return 'https://opensea.io/'
-    }
-
     get hashTags() {
       return ['TEND,NFT']
     }
 
     openTwitter() {
-      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${window.location.href}&hashtags=${this.hashTags}`, '_blank')
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.cardInfo.link}&hashtags=${this.hashTags}`, '_blank')
     }
   }
 </script>
