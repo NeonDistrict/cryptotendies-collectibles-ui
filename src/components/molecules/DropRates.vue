@@ -3,14 +3,12 @@
   .drop-rates__header Details
   .drop-rates__row
     .drop-rates__wrapper {{ dropInfo.cards }} Cards
-    .drop-rates__wrapper min. 1 {{ guaranteedStr }}
   .drop-rates__header Drop Rates
   .drop-rates__wrapper
     .drop-rates__rate(v-for="drop in rarities")
       .drop-rates__rate__detail(:class="`drop-rates__rate--${drop}`") {{`${drop}: `}} {{dropRatePercentage(dropInfo.rates[drop]) }}
   .drop-rates__header Owner
   .drop-rates__row
-    .drop-rates__wrapper {{ownerShortened}}
     .drop-rates__wrapper Owned: {{ ownedCopies }}x
 </template>
 

@@ -60,17 +60,17 @@
   box-sizing: border-box;
 
   @include breakpoint(sm) {
-    height: 18rem;
+    height: 17rem;
     width: 12rem;
   } 
 
   &--large {
     margin: 0 auto;
-    height: 18rem;
+    height: 17rem;
     width: 12rem;
 
     @include breakpoint(sm) {
-      height: 24rem;
+      height: 22.5rem;
       width: 16rem;
     } 
 

@@ -48,7 +48,8 @@ export default class EthereumService {
     if (window.ethereum && window.ethereum.on) {
       try {
         window.ethereum.on('accountsChanged', (accounts) => {
-          window.alert('You switched your ETH wallet. Please refresh the page.')
+          console.log(accounts)
+          this.store.dispatch('nuxtClientInit', {force: true})
         })
       } catch (e) {
         console.error(`error setting listener: ${e}`)

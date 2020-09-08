@@ -42,7 +42,7 @@ modal.card-modal(@modal-close="$emit('modal-close')")
     }
 
     get twitterText() {
-      return 'Get some fresh Tendies Memes:'
+      return 'Look, mommy gave me this fresh tendies meme:'
     }
 
     get url() {
@@ -50,12 +50,11 @@ modal.card-modal(@modal-close="$emit('modal-close')")
     }
 
     get hashTags() {
-      return ['$TEND']
+      return ['TEND,NFT']
     }
 
     openTwitter() {
-      console.log(this.cardInfo)
-      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.url}&hashtags=${this.hashTags}`, '_blank')
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${window.location.href}&hashtags=${this.hashTags}`, '_blank')
     }
   }
 </script>

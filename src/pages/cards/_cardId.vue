@@ -58,15 +58,11 @@
     }
 
     get twitterText() {
-      return 'Get some fresh Tendies Memes:'
-    }
-
-    get url() {
-      return 'https://opensea.io/'
+      return 'Look, mommy gave me this fresh tendies meme:'
     }
 
     get hashTags() {
-      return ['tendies, NFT']
+      return ['TEND,NFT']
     }
 
     get isOwned() {
@@ -74,8 +70,7 @@
     }
 
     linkToTwitter() {
-      console.log(this.cardInfo)
-      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${this.url}&hashtags=${this.hashTags}`, '_blank')
+      window.open(`https://twitter.com/share?text=${this.twitterText}&url=${window.location.href}&hashtags=${this.hashTags}`, '_blank')
     }
 
     linkToOpenSea() {

@@ -71,9 +71,9 @@ export const actions = {
   nuxtServerInit () {
   },
 
-  async nuxtClientInit ({ state, dispatch, commit }, _context) {
+  async nuxtClientInit ({ state, dispatch, commit }, {force = false}) {
     // prevent from double init
-    if (state.didStartInit) return 
+    if (state.didStartInit && !force) return 
     // check for wallet
     if (!this.$ethereumService.hasWallet) {
       await commit('SET_NEXT_AUTH_STEP', NEXT_AUTH_STEPS[0])

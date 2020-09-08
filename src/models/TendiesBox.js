@@ -1,4 +1,4 @@
-import { getBoxInfoFromId } from '~/assets/data/db/mocked'
+import { TENDIES_BOX } from '~/assets/data/ethereum/contractsList'
 
 export default class TendiesBox {
   constructor(data) {
@@ -12,6 +12,6 @@ export default class TendiesBox {
     this.classes = data.classes
     this.guaranteedClasses = data.guaranteedClasses
     this.probabilities = data.probabilities,
-    this.link = 'https://opensea.io/' // temp,
+    this.link = `https://opensea.io/assets/${TENDIES_BOX[1]}/${this.id}` // mainnet only
   }
 }

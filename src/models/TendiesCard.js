@@ -1,3 +1,5 @@
+import { TENDIES_CARD } from '~/assets/data/ethereum/contractsList'
+
 export default class TendiesCard {
   constructor(data) {
     this.id = Number(data.id)
@@ -5,13 +7,13 @@ export default class TendiesCard {
     this.description = data.desc || 'Placeholder Description'
     this.image = data.image
     this.rarity = this.getRarityByClass(data.class)
-    this.link = 'https://opensea.io/' // temp
     this.crispiness = Number(data.crispiness)
     this.seasoning = Number(data.seasoning)
     this.tenderness = Number(data.tenderness)
     this.set = data.set
     this.setId = Number(data.setId)
     this.setName = data.setName
+    this.link = `https://opensea.io/assets/${TENDIES_CARD[1]}/${this.id}` // mainnet only
   }
 
   getRarityByClass(classStr) {
