@@ -11,11 +11,11 @@ export const ALL_BOXES = [{
       legendary: 0
     },
     rates: {
-      common: 0.47,
-      uncommon: 0.28,
+      common: 0.49,
+      uncommon: 0.29,
       rare: 0.15,
-      epic: 0.08,
-      legendary: 0.02
+      epic: 0.055,
+      legendary: 0.015
     }
   }
 }, 
@@ -32,11 +32,11 @@ export const ALL_BOXES = [{
       legendary: 0
     },
     rates: {
-      common: 0.34,
-      uncommon: 0.31,
-      rare: 0.20,
-      epic: 0.11,
-      legendary: 0.04
+      common: 0.43,
+      uncommon: 0.26,
+      rare: 0.18,
+      epic: 0.10,
+      legendary: 0.03
     }
   }
 }]
