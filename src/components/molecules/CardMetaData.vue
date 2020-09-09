@@ -5,7 +5,7 @@
     .drop-rates__wrapper Rarity: 
       span.drop-rates__wrapper__rarity(:class="rarityStr") {{rarityStr}}
     .drop-rates__wrapper Owned: 
-      span {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
+      span {{ownedCount}}x
 </template>
 
 <script lang="ts">
@@ -38,6 +38,10 @@
     get ownerShortened() {
       const owner = "0xfbA2C2bBF977eDA19Ad819Bb46787F4C91d1fFaD"
       return `${owner.substring(0, 5)}...${owner.substring(owner.length - 5, owner.length)}`
+    }
+
+    get ownedCount() {
+      return this.ownCardInfo.count || 0
     }
   }
 </script>
