@@ -105,13 +105,12 @@
     }
 
   &__scene {
-    height: 11.5rem;
+    height: 12.5rem;
     width: 8rem;
-    box-sizing: border-box;
     perspective: 600px;
 
     @include breakpoint(sm) {
-      height: 17rem;
+      height: 17.5rem;
       width: 12rem;
     } 
   }
@@ -131,6 +130,7 @@
       position: absolute;
       height: 100%;
       width: 100%;
+      box-sizing: border-box;
       backface-visibility: hidden;
 
       &--front {

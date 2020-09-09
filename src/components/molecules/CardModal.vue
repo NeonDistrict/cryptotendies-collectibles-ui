@@ -69,7 +69,7 @@ modal.card-modal(@modal-close="$emit('modal-close')")
       grid-gap: 1rem;
       align-items: center;
       @include breakpoint(sm) {
-        grid-template-columns: 0.5fr 1.5fr;
+        grid-template-columns: auto 1.5fr;
         grid-gap: 3rem;
       }
     }

@@ -6,8 +6,10 @@
   .card__wrapper(
     :class="`card__wrapper--${rarityStr}`"
   )
-    .card__wrapper__blur(:style="`background-image: url(${cardInfo.image})`")
-    img.card__wrapper__img(:src="cardInfo.image")
+    img.card__wrapper__img(
+      :class="{'card__wrapper__img--large': isLarge}"
+      :src="cardInfo.image"
+    )
   .card__owned(v-if="showOwned") 
     fa-icon(v-if="isFetchingAssetCount" :icon="['fas', 'spinner']" spin)
     span(v-else) {{ownCardInfo.count ? `${ownCardInfo.count}x` : 'not owned'}}
@@ -54,25 +56,10 @@
 
 <style lang="scss" scoped>
 .card {
-  @extend %col;
-  height: 11.5rem;
-  width: 8rem;
-  box-sizing: border-box;
-
-  @include breakpoint(sm) {
-    height: 17rem;
-    width: 12rem;
-  } 
-
+  display: flex;
+  flex-direction: column;
   &--large {
     margin: 0 auto;
-    height: 17rem;
-    width: 12rem;
-
-    @include breakpoint(sm) {
-      height: 22.5rem;
-      width: 16rem;
-    } 
 
     .card__wrapper {
       cursor: default;
@@ -85,13 +72,11 @@
 
   &__wrapper {
     @extend %col;
-    width: 100%;
-    height: 100%;
     position: relative;
     border-radius: 0.3rem;
     box-shadow: 0 0 8px rgba($color-woodsmoke, 0.5);
     transition: 0.1s ease-in-out;
-    border: solid 2px rgba($color-woodsmoke, 0);
+    border: solid 3px rgba($color-woodsmoke, 0);
     overflow: hidden;
     cursor: pointer;
 
@@ -101,19 +86,19 @@
     }
 
     &--common {
-      border-color: rgba($color-pictonblue, 0.7);
+      border-color: rgba($color-pictonblue, 1);
     }
     &--uncommon {
-      border-color: rgba($color-mainDarkGreen, 0.7);
+      border-color: rgba($color-mainDarkGreen, 1);
     }
     &--rare {
-      border-color: rgba($color-kournikova, 0.7);
+      border-color: rgba($color-kournikova, 1);
     }
     &--epic {
-      border-color: rgba($color-sandyBrown, 0.7);
+      border-color: rgba($color-sandyBrown, 1);
     }
     &--legendary {
-      border-color: rgba($color-bittersweet, 0.7);
+      border-color: rgba($color-bittersweet, 1);
     }
 
     &__blur {
@@ -126,13 +111,28 @@
     }
 
     &__img {
-      position: absolute;
-      width: 100%;
-      height: auto;
+      height: 12rem;
+      width: auto;
+      box-sizing: border-box;
+
+      @include breakpoint(sm) {
+        height: 17rem;
+        width: auto;
+      } 
       -webkit-user-drag: none;
       -khtml-user-drag: none;
       -moz-user-drag: none;
       -o-user-drag: none;
+
+      &--large {
+        height: 17rem;
+        width: auto;
+
+        @include breakpoint(sm) {
+          height: 23rem;
+          width: auto;
+        } 
+      }
     }
   }
 

@@ -115,7 +115,7 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
     display: flex;
     flex-direction: column;
     max-height: 100%;
-    max-width: 640px;
+    max-width: 900px;
     width: 100%;
 
     @include breakpoint(sm) {
