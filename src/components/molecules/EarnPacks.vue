@@ -18,7 +18,7 @@
       .earn__text 
         span TEND on the Grill 
         span (${{tendiesValue}})
-      .earn__grill Grill to get 5 Packs and 1% of TEND
+      .earn__grill Grill to get 3 Packs and 1% of TEND
       button.earn__button(
         @click="grill"
       ) Grill TEND
